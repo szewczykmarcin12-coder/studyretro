@@ -1,27 +1,332 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Procesy Poznawcze – Test 210</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f2f5;color:#1a1a2e;line-height:1.6}.header{background:linear-gradient(135deg,#2c3e7a,#4a6fa5);color:#fff;padding:22px 18px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.15)}.header h1{font-size:1.25em;margin-bottom:3px}.header .sub{font-size:.8em;opacity:.85}.pw{width:100%;max-width:500px;height:8px;background:rgba(255,255,255,.25);border-radius:4px;margin:8px auto 0;overflow:hidden}.pf{height:100%;background:#5cdb95;border-radius:4px;transition:width .3s}.sl{margin-top:5px;font-size:.85em;font-weight:600}.cn{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:8px 0 4px}.cb{padding:5px 12px;border-radius:18px;border:2px solid rgba(255,255,255,.35);background:transparent;color:#fff;font-size:.72em;cursor:pointer;font-weight:500}.cb:hover{background:rgba(255,255,255,.2);border-color:#fff}.container{max-width:780px;margin:0 auto;padding:14px}.st{background:#2c3e7a;color:#fff;padding:13px 18px;border-radius:10px;margin:22px 0 10px;font-size:1em;font-weight:600;display:flex;justify-content:space-between;align-items:center;scroll-margin-top:155px}.st .ss{font-size:.78em;opacity:.85;font-weight:400}.qc{background:#fff;border-radius:10px;padding:16px 18px;margin-bottom:9px;box-shadow:0 1px 3px rgba(0,0,0,.06);border-left:4px solid #4a6fa5;transition:border-color .3s}.qc.ok{border-left-color:#27ae60;background:#f0faf4}.qc.bad{border-left-color:#e74c3c;background:#fdf2f2}.qn{font-size:.73em;color:#999;font-weight:600;margin-bottom:3px}.qt{font-weight:600;margin-bottom:11px;font-size:.91em}.opts{display:flex;flex-direction:column;gap:4px}.op{display:flex;align-items:flex-start;gap:9px;padding:8px 12px;border-radius:7px;border:2px solid #e0e0e0;cursor:pointer;transition:all .15s;font-size:.86em;user-select:none}.op:hover:not(.lk){border-color:#4a6fa5;background:#eef3fa}.op.lk{cursor:default}.op.gc{border-color:#27ae60;background:#d4edda;font-weight:600}.op.gw{border-color:#e74c3c;background:#f8d7da;text-decoration:line-through;opacity:.7}.op input{margin-top:3px;accent-color:#4a6fa5;pointer-events:none}.fb{margin-top:7px;padding:7px 11px;border-radius:6px;font-size:.83em;font-weight:600;display:none}.fb.fok{display:block;background:#d4edda;color:#155724}.fb.fno{display:block;background:#f8d7da;color:#721c24}.ctrls{position:sticky;bottom:0;background:#fff;padding:11px 18px;box-shadow:0 -2px 10px rgba(0,0,0,.1);display:flex;justify-content:center;gap:10px;flex-wrap:wrap;z-index:99}.bt{padding:8px 22px;border:none;border-radius:8px;font-size:.88em;font-weight:600;cursor:pointer}.b1{background:#e0e0e0;color:#333}.b1:hover{background:#ccc}.b2{background:#e74c3c;color:#fff}.b2:hover{background:#c0392b}.hd{display:none!important}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    line-height: 1.6;
+    background: linear-gradient(135deg, #1e1b4b 0%, #3b0764 45%, #831843 100%);
+    color: rgba(255,255,255,.92);
+  }
+
+  /* ====== Top header (glass) ====== */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    padding: 14px 14px;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  .header .row {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .title-wrap h1 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: .2px;
+  }
+  .title-wrap .sub {
+    font-size: .86rem;
+    opacity: .82;
+    margin-top: 3px;
+  }
+
+  .progress-wrap { min-width: 260px; width: 340px; max-width: 42vw; }
+  .pw {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,.18);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+  .pf {
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(52,211,153,1) 0%, rgba(16,185,129,1) 100%);
+    transition: width .25s ease;
+  }
+  .sl {
+    margin-top: 6px;
+    font-size: .85rem;
+    font-weight: 700;
+    color: rgba(255,255,255,.85);
+  }
+
+  /* ====== Layout: sidebar + main ====== */
+  .app {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 14px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+
+  @media (max-width: 980px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { position: relative; top: 0; height: auto; }
+    .progress-wrap { width: 100%; max-width: 100%; }
+    .header .row { flex-direction: column; }
+  }
+
+  /* ====== Sidebar (glass) ====== */
+  .sidebar {
+    position: sticky;
+    top: 86px; /* poniżej headera */
+    height: calc(100vh - 100px);
+    overflow: auto;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 18px;
+    padding: 12px;
+  }
+  .side-head {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .side-title {
+    font-weight: 800;
+    font-size: .95rem;
+    opacity: .95;
+  }
+  .side-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .btn {
+    appearance: none;
+    border: 0;
+    cursor: pointer;
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-weight: 800;
+    color: rgba(255,255,255,.92);
+    background: rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.14);
+    transition: transform .06s ease, background .15s ease, border-color .15s ease;
+    text-align: left;
+  }
+  .btn:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.22); }
+  .btn:active { transform: translateY(1px); }
+  .btn.primary {
+    background: linear-gradient(90deg, rgba(99,102,241,.95), rgba(168,85,247,.95));
+    border-color: rgba(255,255,255,.18);
+  }
+  .btn.danger {
+    background: rgba(239,68,68,.20);
+    border-color: rgba(239,68,68,.25);
+  }
+  .btn.muted {
+    background: rgba(255,255,255,.06);
+    color: rgba(255,255,255,.75);
+  }
+  .hint {
+    font-size: .78rem;
+    opacity: .70;
+    margin-top: -2px;
+  }
+
+  .tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .tab {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 10px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.10);
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease;
+    font-weight: 700;
+    font-size: .86rem;
+    color: rgba(255,255,255,.88);
+  }
+  .tab:hover { background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.16); }
+  .tab .meta { font-weight: 800; opacity: .9; font-size: .78rem; }
+  .tab .score { font-weight: 800; opacity: .85; font-size: .78rem; }
+
+  /* ====== Main cards (glass) ====== */
+  .main { min-width: 0; }
+
+  .st {
+    margin: 16px 0 10px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    scroll-margin-top: 110px;
+  }
+  .st .ss { font-size: .8rem; opacity: .78; font-weight: 700; }
+
+  .qc {
+    border-radius: 18px;
+    padding: 16px 16px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .qc.ok { border-color: rgba(52,211,153,.55); background: rgba(16,185,129,.12); }
+  .qc.bad { border-color: rgba(248,113,113,.55); background: rgba(239,68,68,.12); }
+
+  .qn {
+    font-size: .78rem;
+    font-weight: 800;
+    color: rgba(255,255,255,.60);
+    margin-bottom: 6px;
+  }
+  .qt {
+    font-weight: 800;
+    font-size: 1rem;
+    margin-bottom: 12px;
+    color: rgba(255,255,255,.95);
+  }
+
+  .opts { display: flex; flex-direction: column; gap: 8px; }
+  .op {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 2px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.06);
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease;
+    user-select: none;
+    font-size: .92rem;
+    color: rgba(255,255,255,.88);
+  }
+  .op:hover:not(.lk) {
+    background: rgba(255,255,255,.10);
+    border-color: rgba(255,255,255,.22);
+  }
+  .op.lk { cursor: default; opacity: .95; }
+  .op input { margin-top: 4px; accent-color: #6366f1; pointer-events: none; }
+
+  .op.gc { border-color: rgba(52,211,153,.60); background: rgba(16,185,129,.18); font-weight: 800; }
+  .op.gw { border-color: rgba(248,113,113,.60); background: rgba(239,68,68,.18); text-decoration: line-through; opacity: .85; }
+
+  .fb {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-size: .9rem;
+    font-weight: 800;
+    display: none;
+  }
+  .fb.fok { display: block; background: rgba(16,185,129,.18); border: 1px solid rgba(52,211,153,.35); color: rgba(236,253,245,.95); }
+  .fb.fno { display: block; background: rgba(239,68,68,.18); border: 1px solid rgba(248,113,113,.35); color: rgba(254,242,242,.95); }
+
+  /* ====== Bottom controls (glass) ====== */
+  .ctrls {
+    position: sticky;
+    bottom: 0;
+    z-index: 150;
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hd { display: none !important; }
+
+  /* small scrollbar */
+  .sidebar::-webkit-scrollbar { width: 10px; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); border-radius: 999px; border: 2px solid rgba(0,0,0,0); background-clip: padding-box; }
 </style>
 </head>
+
 <body>
-<div class="header">
-<h1>Procesy Poznawcze – Test</h1>
-<div class="sub" id="status">210 pytań · Zaznacz odpowiedź, aby zobaczyć wynik</div>
-<div class="pw"><div class="pf" id="pf"></div></div>
-<div class="sl" id="sl"></div>
-<div class="cn" id="cn"></div>
-</div>
-<div class="container" id="ct"></div>
-<div class="ctrls">
-<button class="bt b1" id="fb" onclick="tf()">Pokaż tylko błędne</button>
-<button class="bt b2" onclick="ra()">Resetuj test</button>
-</div>
+  <div class="header">
+    <div class="row">
+      <div class="title-wrap">
+        <h1>Procesy Poznawcze – Test</h1>
+        <div class="sub" id="status">210 pytań · Zaznacz odpowiedź, aby zobaczyć wynik</div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="pw"><div class="pf" id="pf"></div></div>
+        <div class="sl" id="sl"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" aria-label="Nawigacja testu">
+      <div class="side-head">
+        <div class="side-title">Zakładki tematyczne</div>
+        <div class="side-actions">
+          <button class="btn primary" id="rnd30" onclick="random30()">🎲 Losuj 30 pytań</button>
+          <button class="btn muted" id="all210" onclick="showAll()">📚 Pokaż wszystkie (210)</button>
+          <div class="hint" id="modeHint">Tryb: pełny test</div>
+        </div>
+      </div>
+
+      <div class="tabs" id="cn"></div>
+
+      <div style="height:10px"></div>
+      <button class="btn" id="fb" onclick="tf()">Pokaż tylko błędne</button>
+      <button class="btn danger" onclick="ra()">Resetuj test</button>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div id="ct"></div>
+
+      <div class="ctrls">
+        <button class="btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆️ Do góry</button>
+        <button class="btn" onclick="tf()" id="fb2">Pokaż tylko błędne</button>
+        <button class="btn danger" onclick="ra()">Resetuj test</button>
+      </div>
+    </main>
+  </div>
+
 <script>
+/* ====== PYTANIA (bez zmian treści) ====== */
 var Q=[
 {s:"Percepcja i psychofizyka",n:1,q:"Które z poniższych najlepiej opisuje pojęcie «bodziec dystalny»?",o:["To bodziec odbierany bezpośrednio przez narządy zmysłów","To subiektywne doświadczenie bodźca po przetworzeniu przez układ nerwowy","To obiekt lub zjawisko w środowisku, które powoduje powstanie wrażeń zmysłowych","To efekt przetwarzania bodźców sensorycznych w mózgu"],c:2},
 {n:2,q:"Obiekt fizyczny, istniejący w świecie zewnętrznym w stosunku do obserwatora, to:",o:["bodziec proksymalny","bodziec dystalny","bodziec natalny","bodziec feralny"],c:1},
@@ -235,51 +540,286 @@ var Q=[
 {n:210,q:"Schematy eksploracyjne wg Neissera to:",o:["wrodzone schematy poznawcze","nabywane w wieku nastoletnim","nabywane w późnej starości","żadne z powyższych"],c:0}
 ];
 
-var S=[],cs=null,ta=0,tc=0,fw=false,st=[];
-for(var i=0;i<Q.length;i++){st.push(-1);if(Q[i].s){cs={nm:Q[i].s,a:i,b:i,ok:0,ans:0};S.push(cs)}if(cs)cs.b=i}
+/* ====== LOGIKA TESTU (zachowana, ale dostosowana do podzbioru + sidebar) ====== */
+var allIdx = Q.map(function(_, i){ return i; });
+var activeIdx = allIdx.slice();         // aktualnie używany zestaw pytań
+var mode = "all";                        // "all" | "rnd30"
+var st = [];                             // zaznaczenia (dla wszystkich pytań, niezależnie od trybu)
+var ta = 0, tc = 0, fw = false;          // answered, correct, filterWrong
+var sections = [];                       // sekcje aktualnego widoku
 
-function render(){
-var h='',si=0,L='abcd';
-for(var i=0;i<Q.length;i++){var q=Q[i];
-if(q.s){var s=S[si],cnt=s.b-s.a+1;
-h+='<div class="st" id="s'+si+'"><span>'+q.s+' ('+cnt+' pyt.)</span><span class="ss" id="ss'+si+'"></span></div>';si++}
-h+='<div class="qc" id="q'+i+'"><div class="qn">Pytanie '+q.n+' / 210</div><div class="qt">'+q.q+'</div><div class="opts">';
-for(var j=0;j<q.o.length;j++){h+='<label class="op" id="o'+i+'_'+j+'" onclick="pk('+i+','+j+')"><input type="radio" name="r'+i+'" value="'+j+'"><span>'+L[j]+') '+q.o[j]+'</span></label>'}
-h+='</div><div class="fb" id="f'+i+'"></div></div>'}
-document.getElementById('ct').innerHTML=h;
-var nav=document.getElementById('cn');
-nav.innerHTML=S.map(function(s,i){return '<button class="cb" onclick="document.getElementById(\'s'+i+'\').scrollIntoView({behavior:\'smooth\'})">'+s.nm+' <span id="cs'+i+'"></span></button>'}).join('')}
+function initStateOnce() {
+  if (st.length !== Q.length) {
+    st = new Array(Q.length).fill(-1);
+  }
+}
+initStateOnce();
 
-function pk(i,j){
-if(st[i]!==-1)return;st[i]=j;
-var q=Q[i],ok=j===q.c,card=document.getElementById('q'+i),fb=document.getElementById('f'+i);
-var ops=card.querySelectorAll('.op');
-for(var k=0;k<ops.length;k++){ops[k].classList.add('lk');if(k===q.c)ops[k].classList.add('gc');if(k===j&&!ok)ops[k].classList.add('gw')}
-if(ok){card.classList.add('ok');fb.className='fb fok';fb.textContent='\u2713 Poprawna odpowied\u017a!';tc++}
-else{card.classList.add('bad');fb.className='fb fno';fb.textContent='\u2717 B\u0142\u0119dna. Poprawna: '+'abcd'[q.c]+') '+q.o[q.c]}
-ta++;
-for(var k=0;k<S.length;k++){if(i>=S[k].a&&i<=S[k].b){S[k].ans++;if(ok)S[k].ok++;break}}
-us()}
+/* znajdź nazwę sekcji dla dowolnego indeksu (nawet gdy losowanie zacznie się w środku sekcji) */
+function sectionNameForIndex(i) {
+  for (var k = i; k >= 0; k--) {
+    if (Q[k].s) return Q[k].s;
+  }
+  return "Inne";
+}
 
-function us(){
-var p=Math.round(ta/Q.length*100);
-document.getElementById('pf').style.width=p+'%';
-document.getElementById('status').textContent='Odpowiedziano: '+ta+' / '+Q.length;
-if(ta>0){var sp=Math.round(tc/ta*100);document.getElementById('sl').innerHTML='\u2713 '+tc+' poprawnych \u00b7 \u2717 '+(ta-tc)+' b\u0142\u0119dnych \u00b7 '+sp+'% skuteczno\u015bci'}
-for(var i=0;i<S.length;i++){var e1=document.getElementById('ss'+i),e2=document.getElementById('cs'+i);if(S[i].ans>0){var t=S[i].ok+'/'+S[i].ans;if(e1)e1.textContent=t;if(e2)e2.textContent='('+t+')'}}}
+/* buduj sekcje na podstawie activeIdx (w kolejności w dokumencie) */
+function buildSectionsFromActive() {
+  var idxSorted = activeIdx.slice().sort(function(a,b){ return a-b; });
+  var map = new Map();
+  var order = [];
 
-function tf(){
-fw=!fw;document.getElementById('fb').textContent=fw?'Poka\u017c wszystkie':'Poka\u017c tylko b\u0142\u0119dne';
-for(var i=0;i<Q.length;i++){var c=document.getElementById('q'+i);if(fw&&st[i]!==-1&&st[i]===Q[i].c)c.classList.add('hd');else c.classList.remove('hd')}
-for(var i=0;i<S.length;i++){var el=document.getElementById('s'+i);if(fw){var vis=false;for(var j=S[i].a;j<=S[i].b;j++){if(st[j]===-1||st[j]!==Q[j].c){vis=true;break}}el.classList.toggle('hd',!vis)}else el.classList.remove('hd')}}
+  for (var t = 0; t < idxSorted.length; t++) {
+    var qi = idxSorted[t];
+    var nm = sectionNameForIndex(qi);
+    if (!map.has(nm)) {
+      map.set(nm, { nm: nm, indices: [], ok: 0, ans: 0, anchor: null });
+      order.push(nm);
+    }
+    map.get(nm).indices.push(qi);
+  }
 
-function ra(){
-ta=0;tc=0;fw=false;for(var i=0;i<st.length;i++)st[i]=-1;
-for(var i=0;i<S.length;i++){S[i].ok=0;S[i].ans=0}
-document.getElementById('fb').textContent='Poka\u017c tylko b\u0142\u0119dne';
-document.getElementById('sl').innerHTML='';render();us();window.scrollTo({top:0,behavior:'smooth'})}
+  sections = order.map(function(nm, si){
+    var s = map.get(nm);
+    s.anchor = "s" + si;
+    // policz statystyki sekcji (tylko w aktywnych pytaniach)
+    var ok = 0, ans = 0;
+    for (var x = 0; x < s.indices.length; x++) {
+      var qi = s.indices[x];
+      if (st[qi] !== -1) {
+        ans++;
+        if (st[qi] === Q[qi].c) ok++;
+      }
+    }
+    s.ok = ok;
+    s.ans = ans;
+    return s;
+  });
+}
 
-render();us();
+function render() {
+  initStateOnce();
+  buildSectionsFromActive();
+
+  var L = "abcd";
+  var h = "";
+
+  for (var si = 0; si < sections.length; si++) {
+    var sec = sections[si];
+    h += '<div class="st" id="'+sec.anchor+'">'
+      +  '<span>'+sec.nm+' ('+sec.indices.length+' pyt.)</span>'
+      +  '<span class="ss" id="ss'+si+'"></span>'
+      + '</div>';
+
+    for (var t = 0; t < sec.indices.length; t++) {
+      var i = sec.indices[t];
+      var q = Q[i];
+
+      h += '<div class="qc" id="q'+i+'">'
+        +  '<div class="qn">Pytanie '+q.n+' / 210</div>'
+        +  '<div class="qt">'+q.q+'</div>'
+        +  '<div class="opts">';
+
+      for (var j = 0; j < q.o.length; j++) {
+        h += '<label class="op" id="o'+i+'_'+j+'" onclick="pk('+i+','+j+')">'
+          +  '<input type="radio" name="r'+i+'" value="'+j+'">'
+          +  '<span>'+L[j]+') '+q.o[j]+'</span>'
+          + '</label>';
+      }
+
+      h += '</div><div class="fb" id="f'+i+'"></div></div>';
+    }
+  }
+
+  document.getElementById("ct").innerHTML = h;
+
+  // sidebar tabs
+  var nav = document.getElementById("cn");
+  nav.innerHTML = sections.map(function(s, i){
+    var sc = (s.ans > 0) ? (s.ok + "/" + s.ans) : "—";
+    return '<div class="tab" onclick="document.getElementById(\''+s.anchor+'\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">'
+      +  '<span>'+s.nm+'</span>'
+      +  '<span class="meta"><span class="score" id="cs'+i+'">('+sc+')</span></span>'
+      + '</div>';
+  }).join("");
+
+  // odtwórz stan zaznaczeń dla już odpowiedzianych
+  for (var k = 0; k < activeIdx.length; k++) {
+    var i = activeIdx[k];
+    if (st[i] !== -1) {
+      applyAnsweredUI(i, st[i]);
+    }
+  }
+
+  us(); // update status
+  if (fw) tf(true); // jeśli filtr był włączony, odśwież widoczność
+}
+
+function applyAnsweredUI(i, chosen) {
+  var q = Q[i];
+  var ok = chosen === q.c;
+  var card = document.getElementById("q"+i);
+  if (!card) return;
+
+  var fb = document.getElementById("f"+i);
+  var ops = card.querySelectorAll(".op");
+
+  for (var k = 0; k < ops.length; k++) {
+    ops[k].classList.add("lk");
+    if (k === q.c) ops[k].classList.add("gc");
+    if (k === chosen && !ok) ops[k].classList.add("gw");
+  }
+
+  if (ok) {
+    card.classList.add("ok");
+    fb.className = "fb fok";
+    fb.textContent = "✓ Poprawna odpowiedź!";
+  } else {
+    card.classList.add("bad");
+    fb.className = "fb fno";
+    fb.textContent = "✗ Błędna. Poprawna: " + "abcd"[q.c] + ") " + q.o[q.c];
+  }
+}
+
+function pk(i, j) {
+  if (st[i] !== -1) return;
+
+  st[i] = j;
+  var q = Q[i];
+  var ok = j === q.c;
+
+  applyAnsweredUI(i, j);
+
+  // aktualizuj liczniki tylko dla aktywnego zestawu
+  ta++; if (ok) tc++;
+
+  // sekcje statystyki przeliczymy w us()
+  us();
+}
+
+function us() {
+  // przelicz odpowiedzi/correct tylko w obrębie activeIdx (żeby losowane 30 działało poprawnie)
+  var a = 0, c = 0;
+  for (var k = 0; k < activeIdx.length; k++) {
+    var i = activeIdx[k];
+    if (st[i] !== -1) {
+      a++;
+      if (st[i] === Q[i].c) c++;
+    }
+  }
+  ta = a; tc = c;
+
+  var denom = activeIdx.length || 1;
+  var p = Math.round((ta / denom) * 100);
+  document.getElementById("pf").style.width = p + "%";
+  document.getElementById("status").textContent = "Odpowiedziano: " + ta + " / " + denom + (mode === "rnd30" ? " (losowe 30)" : "");
+  document.getElementById("modeHint").textContent = "Tryb: " + (mode === "rnd30" ? "losowe 30 pytań" : "pełny test");
+
+  if (ta > 0) {
+    var sp = Math.round((tc / ta) * 100);
+    document.getElementById("sl").innerHTML = "✓ " + tc + " poprawnych · ✗ " + (ta - tc) + " błędnych · " + sp + "% skuteczności";
+  } else {
+    document.getElementById("sl").innerHTML = "";
+  }
+
+  // update per-section counters in header + sidebar
+  buildSectionsFromActive();
+  for (var i = 0; i < sections.length; i++) {
+    var t = (sections[i].ans > 0) ? (sections[i].ok + "/" + sections[i].ans) : "";
+    var e1 = document.getElementById("ss" + i);
+    var e2 = document.getElementById("cs" + i);
+    if (e1) e1.textContent = t ? t : "—";
+    if (e2) e2.textContent = "(" + (t ? t : "—") + ")";
+  }
+}
+
+function tf(skipToggle) {
+  if (!skipToggle) fw = !fw;
+
+  var txt = fw ? "Pokaż wszystkie" : "Pokaż tylko błędne";
+  var fb1 = document.getElementById("fb");
+  var fb2 = document.getElementById("fb2");
+  if (fb1) fb1.textContent = txt;
+  if (fb2) fb2.textContent = txt;
+
+  // hide/show question cards
+  for (var k = 0; k < activeIdx.length; k++) {
+    var i = activeIdx[k];
+    var c = document.getElementById("q" + i);
+    if (!c) continue;
+
+    if (fw) {
+      // pokaż tylko błędne + nieodpowiedziane
+      if (st[i] !== -1 && st[i] === Q[i].c) c.classList.add("hd");
+      else c.classList.remove("hd");
+    } else {
+      c.classList.remove("hd");
+    }
+  }
+
+  // hide sections that become empty under filter
+  for (var si = 0; si < sections.length; si++) {
+    var sec = sections[si];
+    var el = document.getElementById(sec.anchor);
+    if (!el) continue;
+
+    if (!fw) { el.classList.remove("hd"); continue; }
+
+    var vis = false;
+    for (var t = 0; t < sec.indices.length; t++) {
+      var qi = sec.indices[t];
+      if (st[qi] === -1 || st[qi] !== Q[qi].c) { vis = true; break; }
+    }
+    el.classList.toggle("hd", !vis);
+  }
+}
+
+function resetAnswersOnly() {
+  // reset zaznaczeń TYLKO w obrębie aktywnego zestawu
+  for (var k = 0; k < activeIdx.length; k++) {
+    st[activeIdx[k]] = -1;
+  }
+  ta = 0; tc = 0; fw = false;
+}
+
+function ra() {
+  resetAnswersOnly();
+  var fb1 = document.getElementById("fb");
+  var fb2 = document.getElementById("fb2");
+  if (fb1) fb1.textContent = "Pokaż tylko błędne";
+  if (fb2) fb2.textContent = "Pokaż tylko błędne";
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* ====== Losowanie 30 pytań ====== */
+function shuffle(arr) {
+  for (var i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+  }
+  return arr;
+}
+
+function random30() {
+  mode = "rnd30";
+  activeIdx = shuffle(allIdx.slice()).slice(0, Math.min(30, allIdx.length));
+  activeIdx.sort(function(a,b){ return a-b; }); // żeby sekcje były w logicznej kolejności
+  resetAnswersOnly();
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function showAll() {
+  mode = "all";
+  activeIdx = allIdx.slice();
+  resetAnswersOnly();
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* ====== start ====== */
+render();
 </script>
 </body>
 </html>
