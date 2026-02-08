@@ -1,12 +1,285 @@
 <!DOCTYPE html>
 <html lang="pl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>StudyRetro</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Procesy Poznawcze – Test 210</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f2f5;color:#1a1a2e;line-height:1.6}.header{background:linear-gradient(135deg,#2c3e7a,#4a6fa5);color:#fff;padding:22px 18px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.15)}.header h1{font-size:1.25em;margin-bottom:3px}.header .sub{font-size:.8em;opacity:.85}.pw{width:100%;max-width:500px;height:8px;background:rgba(255,255,255,.25);border-radius:4px;margin:8px auto 0;overflow:hidden}.pf{height:100%;background:#5cdb95;border-radius:4px;transition:width .3s}.sl{margin-top:5px;font-size:.85em;font-weight:600}.cn{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:8px 0 4px}.cb{padding:5px 12px;border-radius:18px;border:2px solid rgba(255,255,255,.35);background:transparent;color:#fff;font-size:.72em;cursor:pointer;font-weight:500}.cb:hover{background:rgba(255,255,255,.2);border-color:#fff}.container{max-width:780px;margin:0 auto;padding:14px}.st{background:#2c3e7a;color:#fff;padding:13px 18px;border-radius:10px;margin:22px 0 10px;font-size:1em;font-weight:600;display:flex;justify-content:space-between;align-items:center;scroll-margin-top:155px}.st .ss{font-size:.78em;opacity:.85;font-weight:400}.qc{background:#fff;border-radius:10px;padding:16px 18px;margin-bottom:9px;box-shadow:0 1px 3px rgba(0,0,0,.06);border-left:4px solid #4a6fa5;transition:border-color .3s}.qc.ok{border-left-color:#27ae60;background:#f0faf4}.qc.bad{border-left-color:#e74c3c;background:#fdf2f2}.qn{font-size:.73em;color:#999;font-weight:600;margin-bottom:3px}.qt{font-weight:600;margin-bottom:11px;font-size:.91em}.opts{display:flex;flex-direction:column;gap:4px}.op{display:flex;align-items:flex-start;gap:9px;padding:8px 12px;border-radius:7px;border:2px solid #e0e0e0;cursor:pointer;transition:all .15s;font-size:.86em;user-select:none}.op:hover:not(.lk){border-color:#4a6fa5;background:#eef3fa}.op.lk{cursor:default}.op.gc{border-color:#27ae60;background:#d4edda;font-weight:600}.op.gw{border-color:#e74c3c;background:#f8d7da;text-decoration:line-through;opacity:.7}.op input{margin-top:3px;accent-color:#4a6fa5;pointer-events:none}.fb{margin-top:7px;padding:7px 11px;border-radius:6px;font-size:.83em;font-weight:600;display:none}.fb.fok{display:block;background:#d4edda;color:#155724}.fb.fno{display:block;background:#f8d7da;color:#721c24}.ctrls{position:sticky;bottom:0;background:#fff;padding:11px 18px;box-shadow:0 -2px 10px rgba(0,0,0,.1);display:flex;justify-content:center;gap:10px;flex-wrap:wrap;z-index:99}.bt{padding:8px 22px;border:none;border-radius:8px;font-size:.88em;font-weight:600;cursor:pointer}.b1{background:#e0e0e0;color:#333}.b1:hover{background:#ccc}.b2{background:#e74c3c;color:#fff}.b2:hover{background:#c0392b}.hd{display:none!important}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>Procesy Poznawcze – Test</h1>
+<div class="sub" id="status">210 pytań · Zaznacz odpowiedź, aby zobaczyć wynik</div>
+<div class="pw"><div class="pf" id="pf"></div></div>
+<div class="sl" id="sl"></div>
+<div class="cn" id="cn"></div>
+</div>
+<div class="container" id="ct"></div>
+<div class="ctrls">
+<button class="bt b1" id="fb" onclick="tf()">Pokaż tylko błędne</button>
+<button class="bt b2" onclick="ra()">Resetuj test</button>
+</div>
+<script>
+var Q=[
+{s:"Percepcja i psychofizyka",n:1,q:"Które z poniższych najlepiej opisuje pojęcie «bodziec dystalny»?",o:["To bodziec odbierany bezpośrednio przez narządy zmysłów","To subiektywne doświadczenie bodźca po przetworzeniu przez układ nerwowy","To obiekt lub zjawisko w środowisku, które powoduje powstanie wrażeń zmysłowych","To efekt przetwarzania bodźców sensorycznych w mózgu"],c:2},
+{n:2,q:"Obiekt fizyczny, istniejący w świecie zewnętrznym w stosunku do obserwatora, to:",o:["bodziec proksymalny","bodziec dystalny","bodziec natalny","bodziec feralny"],c:1},
+{n:3,q:"Podstawowe zadanie obliczeniowe percepcji to:",o:["konstruowanie bodźców wyobrażeń proksymalnych","określenie właściwości bodźca dystalnego na podstawie proksymalnego","określenie właściwości bodźca proksymalnego na podstawie dystalnego","konstruowanie bodźców wyobrażeń dystalnych"],c:1},
+{n:4,q:"Próg różnicy w percepcji to taka wielkość różnicy:",o:["przy której bodźce rozpoznawane jako odmienne w 75%","przy której bodźce rozpoznawane jako odmienne w połowie przypadków","przy którym sygnał zmysłowy wykrywany w 75%","przy którym sygnał zmysłowy wykrywany w 99%"],c:1},
+{n:5,q:"Prawo Webera dotyczy:",o:["ledwie dostrzegalnej różnicy","detekcji macierzowej","regresji uwagowej","reaktancji bodźcowej"],c:0},
+{n:6,q:"Dla natężenia światła stała Webera wynosi:",o:["0,2","0,4","3","0,01"],c:0},
+{n:7,q:"Według Zimbardo jedną z najbardziej znaczących postaci w historii psychofizyki był:",o:["Gustav Fechner","Herbert von Helmholtz","Kurt Koffka","Max Wertheimer"],c:0},
+{n:8,q:"Badaniem relacji między stymulacją fizyczną a doświadczeniem psychicznym zajmuje się:",o:["epistemologia","psychokinetyka","psychofizyka","psychotronika"],c:2},
+{n:9,q:"Teoria detekcji sygnałów powstała jako model procesu odróżniania sygnału od:",o:["bodźców redundantnych","szumu","prym wydatnych","sensorycznych aberracji"],c:1},
+{n:10,q:"Zgodnie z teorią detekcji sygnałów, gdy sygnał był prezentowany i obserwator zareagował, reakcja jest:",o:["poprawnym odrzuceniem","fałszywym alarmem","trafieniem (hit)","pudłem/pominięciem (miss)"],c:2},
+{n:11,q:"Idealny obserwator ma niższe kryterium decyzyjne dla:",o:["sygnałów prawdopodobnych niż mniej prawdopodobnych","bodźców letalnych niż sygnałów witalnych","sygnałów parakonsystentnych niż sekwencjonowanych","wszystkie powyższe są poprawne"],c:0},
+{n:12,q:"Stymulacja wystarczająco silna, aby pobudzić organy sensoryczne, ale zbyt słaba, aby ją świadomie zauważyć, to bodziec:",o:["podprogowy","senseptywny","aferentny","różnicowy"],c:0},
+{n:13,q:"Zjawisko utraty zdolności komórek recepcyjnych do reagowania po okresie niezmieniającej się stymulacji to:",o:["ataksja receptorowa","adaptacja sensoryczna","dyletacja progowa","dystrakcja obciążeniowa"],c:1},
+{n:14,q:"Znaczne i przedłużone obniżenie poziomu stymulacji sensorycznej prowadzi do:",o:["deratyzacji sensorycznej","detonacji sensorycznej","deprywacji sensorycznej","degradacji sensorycznej"],c:2},
+{n:15,q:"Jakie efekty zaobserwowano u uczestników eksperymentu z deprywacją sensoryczną?",o:["Poprawa koncentracji","Brak istotnych zmian","Całkowita utrata zdolności percepcji","Zwiększona drażliwość, halucynacje i spadek zdolności poznawczych"],c:3},
+{n:16,q:"Przedłużająca się deprywacja sensoryczna wiąże się z:",o:["halucynacjami","mniejszym krytycyzmem myślenia","labilnością emocjonalną","wszystkie podane odpowiedzi są poprawne"],c:3},
+{n:17,q:"Proces transdukcji w układzie sensorycznym to:",o:["przekształcanie energii fizycznej lub chemicznej na sygnał nerwowy","wyłącznie przesyłanie impulsów nerwowych z receptorów do mózgu","łączenie bodźców sensorycznych w korze mózgowej","zdolność organizmu do rozpoznawania i klasyfikowania bodźców"],c:0},
+{n:18,q:"Przekształcenie światła w impulsy nerwowe to przykład:",o:["redundancji","transdukcji","transferu quasi-modalnego","transkrypcji abdukcyjnej"],c:1},
+{n:19,q:"Analizator to:",o:["układ sensoryczny","zespół receptorów, struktur i dróg nerwowych","a i b są poprawne","żadna z powyższych"],c:2},
+{n:20,q:"Mechanizm pozwalający na niezmienność percepcji mimo zmieniających się warunków to:",o:["Złagodzenie percepcyjne","Stałość percepcyjna","Nastawienie percepcyjne","Stabilność sensoryczna"],c:1},
+{n:21,q:"Lehr i Fisher (1988) – procesy przetwarzania informacji powinny podlegać pomiarowi w jednostkach:",o:["czasu i ilości informacji","komputacyjnych zwanych ergami","semiotycznych i wertykalnych","siły aktywacji węzłów sieci syntaktycznej"],c:0},
+{s:"Widzenie",n:22,q:"Funkcja komórek dwubiegunowych siatkówki to:",o:["Przetwarzanie info wizualnych i przesyłanie do kory wzrokowej","Detekcja barw i intensywności światła","To główne komórki odbierające światło w siatkówce","Przekazywanie sygnałów z fotoreceptorów do komórek zwojowych"],c:3},
+{n:23,q:"Komórki nerwowe łączące impulsy z licznych fotoreceptorów to:",o:["komórki zwojowe","komórki ślepe","komórki amakrynowe","komórki dwubiegunowe"],c:3},
+{n:24,q:"Duża ilość czopków znajduje się w:",o:["plamce żółtej","plamce ślepej","mroczku","polu amakrynowym"],c:0},
+{n:25,q:"Co określamy jako «plamkę żółtą» w oku?",o:["obszar o największej ilości pręcików","obszar o największej ilości czopków","miejsce, gdzie nerw wzrokowy opuszcza oko","obszar bez fotoreceptorów"],c:1},
+{n:26,q:"Część centralna siatkówki z dużym skupieniem czopków to:",o:["dołek centralny","plamka ślepa","plamka wrażliwa","a, b i c są błędne"],c:0},
+{n:27,q:"Za rejestrowanie szczegółów oglądanego obrazu odpowiadają:",o:["czopki","pręciki","słupki","nocyceptory"],c:0},
+{n:28,q:"Bezpośrednio po zapaleniu mocnego światła:",o:["aktywne są przede wszystkim czopki","aktywne są wyłącznie słupki","maksimum wrażliwości osiągają słupki","a, b i c są błędne"],c:0},
+{n:29,q:"Część pola widzenia, na którą reaguje dany receptor, to jego:",o:["pole percepcyjne","pole spostrzeżeniowe","pole recepcyjne","żadna z powyższych"],c:2},
+{n:30,q:"Teoria trójchromatyczna widzenia barw zakłada:",o:["Oko posiada trzy rodzaje czopków reagujących na różne długości fal","Percepcja barw wynika z przeciwstawnych procesów w siatkówce","Widzenie barw zależy wyłącznie od intensywności światła","Oko odbiera barwy poprzez pojedynczy rodzaj czopków"],c:0},
+{n:31,q:"Dopełniającą barwą barwy czerwonej jest barwa:",o:["żółtozielona","fioletowoniebieska","niebieskozielona","żółta"],c:2},
+{n:32,q:"Barwy, które zmieszane tworzą wrażenie światła białego, to barwy:",o:["trichotyczne","żółta i czerwona","żółta i zielona","komplementarne"],c:3},
+{n:33,q:"Maxwell w doświadczeniach dotyczących widzenia barw stosował:",o:["szybko obracające się kolorowe tarcze","wolno rotujące różnobarwne graniastosłupy","wiatraki z czterema barwnymi skrzydłami","a, b i c są błędne"],c:0},
+{n:34,q:"Wymiar opisujący jakościowe doświadczenie barwy światła to:",o:["nasycenie","żywość","odcień","żadna z podanych"],c:2},
+{n:35,q:"Druga droga przekazu informacji wzrokowej z oka wiedzie przez:",o:["ciało kolankowate boczne","przednią część zakrętu zębatego","jądro migdałowate","a, b i c są błędne"],c:0},
+{n:36,q:"Hubel i Wiesel prowadzili badania elektrofizjologiczne dotyczące:",o:["organizacji pamięci niejawnej","struktury implantów pamięciowych","organizacji kory wzrokowej","a, b i c są błędne"],c:2},
+{n:37,q:"Osoby o prawidłowej akomodacji skupiają wzrok na obiektach od ok.:",o:["0,5 cm od nosa","8 cm od nosa","1 cm od nosa","2 cm od nosa"],c:1},
+{n:38,q:"Ruchy konwergencyjne gałek oczu to inaczej ruchy:",o:["finezyjne","fuzyjne","fugowe","fraktalowe"],c:1},
+{n:39,q:"Duże ruchy oczu to np.:",o:["ruchy podążania","mikrosakady","dryft","tremor"],c:0},
+{n:40,q:"Stereopsja jest podstawowym mechanizmem:",o:["uwagowym","widzenia barwy","percepcji subliminalnej","żadna z powyższych (percepcji głębi)"],c:3},
+{n:41,q:"Binokularny mechanizm widzenia głębi oparty jest na informacji o:",o:["absorpcji dagerotypicznej","konwergencji oczu","dyspersji amakrynowej","a, b i c są błędne"],c:1},
+{n:42,q:"Gradienty faktury dostarczają informacji o:",o:["głębi","paralaksie aferentnej","retardacji","submisji optycznej"],c:0},
+{n:43,q:"Funkcja zakrętu wrzecionowatego to:",o:["przetwarzanie bodźców ruchowych","kontrola ruchów gałek ocznych","udział w rozpoznawaniu twarzy i obiektów wizualnych","analiza dźwięków i przetwarzanie mowy"],c:2},
+{n:44,q:"Niedostrzeganie ruchu przedmiotów jest objawem:",o:["akinetopsji","prozopagnozji","submisji","powyższe odpowiedzi są błędne"],c:0},
+{n:45,q:"Co będzie skutkiem uszkodzenia obszaru MT/V5?",o:["Prozopagnozja","Akinetopsja","Achromatopsja","Agnozja wzrokowa"],c:1},
+{n:46,q:"Zjawisko postrzegania płynnego ruchu z dwóch punktów w szybkim następstwie to zjawisko:",o:["Ponzo","fi","stałości ruchu","a, b i c są błędne"],c:1},
+{n:47,q:"Zjawisko fi zachodzi, gdy punkty świetlne włączane/wyłączane w tempie około:",o:["20-30 razy na minutę","raz na sekundę","4-5 razy na sekundę","1-2 razy na minutę"],c:2},
+{s:"Percepcja – iluzje i teorie",n:48,q:"Sześcian Neckera jest przykładem:",o:["apercepcji kształtu","ataksji wielkości","stałości jasności","dwuznaczności percepcyjnej"],c:3},
+{n:49,q:"Holenderski artysta Escher jest twórcą tzw. figur:",o:["stabilnych","stereogramowych","dwuznacznych","a, b i c są błędne"],c:2},
+{n:50,q:"Iluzja związana z pokojem Amesa polega na tym, że:",o:["Pokój wydaje się większy z powodu luster","Pokój wydaje się prostokątny mimo kształtu trapezu","Identyczne obiekty mają różną wielkość zależnie od koloru","Efekt wynika z kontrastowych wzorów ścian"],c:1},
+{n:51,q:"Ramachandran (1988) badał z obiektami pozornie 3D zjawisko:",o:["wyprzęgania","wyskakiwania","dekapitacji uwagowej","derealizacji wolitywnej"],c:1},
+{n:52,q:"Wg Gibsona bezpośrednio dostrzegamy funkcjonalne aspekty obiektów, czyli:",o:["adnotacje","alokacje","aspiracje","afordancje"],c:3},
+{n:53,q:"Założenie o bezpośrednim poznawaniu rzeczywistości charakteryzuje:",o:["teorię obliczeniową Marra","teorię ekologiczną Gibsona","teorię asocjacjonistyczną","teorię wzorców"],c:1},
+{n:54,q:"Zgodnie z teorią asocjacjonistyczną:",o:["spostrzeżenie jest niezależne od wrażeń","spostrzeżenie to rodzaj subliminalnego senseptu","wielokrotne łączne występowanie wrażeń sprzyja skojarzeniu","wszystkie powyższe"],c:2},
+{n:55,q:"Główne założenia teorii postaciowej (Gestalt):",o:["Spostrzeżenie to suma niezależnych wrażeń","Całość jest czymś więcej niż suma części","Spostrzeganie to wynik kojarzenia bodźców","Percepcja opiera się wyłącznie na doświadczeniu i pamięci roboczej"],c:1},
+{n:56,q:"Przedstawicielem psychologii Gestalt NIE był:",o:["Wolfgang Köhler","Kurt Koffka","Max Wertheimer","Gustav Fechner"],c:3},
+{n:57,q:"Jedno z praw percepcji Gestalt to prawo:",o:["stałej ekspozycji","wspólnego losu","zagubienia modalnego","samotności percepcyjnej"],c:1},
+{n:58,q:"Na gruncie konstruktywizmu zakłada się, że:",o:["umysł to narzędzie generujące zachowania","umysł to system hydrauliczny","umysł aktywnie tworzy wewnętrzne odzwierciedlenia zewnętrznych obiektów","umysł poznaje rzeczywistość bezpośrednio"],c:2},
+{n:59,q:"Cykl percepcyjny Neissera zakłada, że:",o:["spostrzeganie jest procesem ciągłym","może zaczynać się od informacji w otoczeniu lub schematu pamięciowego","może zaczynać się od eksploracji","wszystkie poprawne"],c:3},
+{n:60,q:"Geometryczne komponenty strukturalne w teorii Biedermana (1987) to:",o:["neony","eony","geony","kreony"],c:2},
+{n:61,q:"Gotowość percepcyjna zależy od:",o:["czynników zewnętrznych","czynników wewnętrznych","a i b są poprawne","żadna odpowiedź nie jest poprawna"],c:2},
+{n:62,q:"Wpływ kontekstu i nastawienia na spostrzeganie dowodzi, że:",o:["spostrzeganie to proces odgórny (top-down)","spostrzeganie to proces oddolny (bottom-up)","spostrzeganie jest niezależne od pamięci","żadne z powyższych"],c:0},
+{n:63,q:"Przykładem uczenia się percepcyjnego jest:",o:["Stopniowa poprawa w rozpoznawaniu różnic między dźwiękami","Zapamiętywanie definicji pojęć","Nauka sekwencji ruchów w tańcu","Rozwiązywanie problemów matematycznych"],c:0},
+{n:64,q:"Detektory cech:",o:["występują wyłącznie u ludzi","odpowiadają za wyodrębnienie specyficznej informacji ze środowiska","są charakterystyczne tylko dla żab","a i b są prawdziwe"],c:1},
+{n:65,q:"Reprezentacjonizm zakłada, że:",o:["umysł poznaje jedynie własne wytwory","umysł poznaje rzeczywistość bezpośrednio","żadna z podanych nie jest poprawna","umysł poznaje rzeczywistość za pośrednictwem własnych kategorii"],c:3},
+{n:66,q:"Reprezentacja bodźca w układzie współrzędnych niezwiązanych z obserwatorem to:",o:["reprezentacja autocentryczna","reprezentacja allocentryczna","reprezentacja koncentryczna","reprezentacja metapsychiczna"],c:1},
+{n:67,q:"Faza oceny znaczenia metaforycznego wg Maruszewskiego:",o:["jest jedną z faz spostrzegania","obejmuje wnioskowanie odwołujące się do indywidualnego systemu znaczeń","nie występuje zawsze","wszystkie są poprawne"],c:3},
+{n:68,q:"Adaptacja do obróconych soczewek zachodzi szybko, gdy osoba:",o:["jest introwertyczna","może swobodnie poruszać się w otoczeniu","kieruje się bodźcami akustycznymi","a, b i c są błędne"],c:1},
+{n:69,q:"Wrażenie ruchu po podróży morskiej (wg Grabowskiej i Budohoskiej) trwa wiele:",o:["godzin","dni","miesięcy","a, b i c są błędne"],c:1},
+{s:"Słuch i inne zmysły",n:70,q:"Głośność dźwięku zależy przede wszystkim od:",o:["fazy fali elektromagnetycznej","amplitudy fali dźwiękowej","częstotliwości fali elektromagnetycznej","żadna z odpowiedzi"],c:1},
+{n:71,q:"Twierdzenie, że amplituda dźwięku = głośność dźwiękowa:",o:["prawda – jedno odpowiada drugiemu","prawda – mierzymy je tak samo","fałsz – amplituda odpowiada wysokości","fałsz – głośność to subiektywny odpowiednik amplitudy"],c:3},
+{n:72,q:"Głośność samolotu odrzutowego z 30 m to około:",o:["60 dB","80 dB","140 dB","100 dB"],c:2},
+{n:73,q:"Fala dźwiękowa porusza się z prędkością około:",o:["30 m/s","3 m/s","300 000 m/s","330 m/s"],c:3},
+{n:74,q:"Różnica między szumem a czystym tonem:",o:["Czysty ton ma losową amplitudę, szum stałą częstotliwość","Szum to fale harmoniczne, czysty ton – przypadkowe wahania","Czysty ton to złożone widmo, szum to jedna harmoniczna","Czysty ton to jedna częstotliwość, szum to szeroki zakres"],c:3},
+{n:75,q:"Funkcja błony bębenkowej:",o:["Przekształca fale dźwiękowe w impulsy elektryczne","Wibruje w odpowiedzi na fale dźwiękowe, przekazując drgania na kosteczki","Reguluje ciśnienie w uchu wewnętrznym","Chroni ślimak przed nadmiernym hałasem"],c:1},
+{n:76,q:"Młoteczek, kowadełko i strzemiączko znajdują się w uchu:",o:["zewnętrznym","środkowym","wewnętrznym","a, b i c są błędne"],c:1},
+{n:77,q:"Ślimak to część:",o:["ucha wewnętrznego","ucha środkowego","ucha zewnętrznego","narządu równowagi"],c:0},
+{n:78,q:"Struktura odpowiedzialna za różnicowanie wysokości dźwięków w uchu wewnętrznym:",o:["narząd Cortiego","błona bębenkowa","błona podstawna","ślimak"],c:2},
+{n:79,q:"Drgania płynu ślimaka wywołują ruchy falowe:",o:["błony podstawnej","okienka Golgiego","okienka perforowanego","a, b i c są błędne"],c:0},
+{n:80,q:"Teoria: dźwięki o różnej wysokości aktywują różne obszary błony podstawnej:",o:["teoria częstotliwości","teoria salwy","teoria miejsca","teoria Wertheimera"],c:2},
+{n:81,q:"Rozszerzenie teorii częstotliwości stanowi:",o:["kwestia interwału","organizacja fonotopowa","zasada salwy","powyższe odpowiedzi są błędne"],c:2},
+{n:82,q:"Dźwięki mowy pobudzają zespoły włókien reagujących na częstotliwości:",o:["formantowe","feronomowe","fatomowe","feronowe"],c:0},
+{n:83,q:"Woreczek i łagiewka są wrażliwe na:",o:["przyspieszenie liniowe","przyspieszenie obrotowe","dźwięki o różnych częstotliwościach","zmiany ciśnienia w uchu"],c:0},
+{n:84,q:"Kamyczki błędnikowe pełnią rolę w tworzeniu doznań:",o:["wzrokowych","słuchowych","smakowych","żadna z powyższych (równowagi)"],c:3},
+{n:85,q:"Zmysł kinestezji dostarcza informacji o:",o:["zjawisku psi","abdukcji somatycznej","pozycji części ciała","żadne z wymienionych"],c:2},
+{n:86,q:"Rola feromonów u ludzi i zwierząt:",o:["hormony regulujące procesy metaboliczne","wyłącznie percepcja zapachów","działają jedynie między różnymi gatunkami","substancje chemiczne wpływające na zachowanie osobników tego samego gatunku"],c:3},
+{n:87,q:"Ośrodek, do którego receptory węchowe przesyłają sygnały:",o:["opuszka węchowa","podpuszczka palczasta","podpuszczka węchowa","opuszka palczasta"],c:0},
+{n:88,q:"Substancja pobudzająca receptory bólowe oprócz kubków smakowych:",o:["kapulatyna","żelatyna","kapsaicyna","żel boronowy"],c:2},
+{n:89,q:"Ronald Melzack (1973, 1980) zaproponował teorię:",o:["grobli","zalewu","tamy","molo"],c:0},
+{s:"Uwaga",n:90,q:"W teorii Posnera za selekcję reakcji i hamowanie nawykowych reakcji odpowiada uwaga:",o:["orientacyjna","wykonawcza","wzbudzeniowa","wszystkie poprawne"],c:1},
+{n:91,q:"Paradygmat Posnera w badaniach nad uwagą:",o:["uczestnicy wykonują skomplikowane sekwencje ruchów","bada przełączanie uwagi między modalnościami","bada orientację uwagi poprzez prezentację wskazówek","opisuje równomierne rozdzielanie uwagi"],c:2},
+{n:92,q:"W paradygmacie Posnera czas reakcji na bodziec jest:",o:["dłuższy dla wskazówek trafnych niż neutralnych","krótszy dla wskazówek trafnych niż nietrafnych","niezmienny niezależnie od wskazówki","krótszy dla wskazówek nietrafnych niż neutralnych"],c:1},
+{n:93,q:"Mechanizm przesuwania zasobów uwagi wg Posnera to:",o:["żadne z wymienionych","uwaga wykonawcza","uwaga orientacyjna","aktywacja"],c:2},
+{n:94,q:"Model uwagi Broadbenta zakłada:",o:["przetwarzanie równoległe bez potrzeby selekcji","informacje selekcjonowane na wczesnym etapie przetwarzania","uwaga dostosowuje się na podstawie znaczenia emocjonalnego","wszystkie informacje przetwarzane jednocześnie"],c:1},
+{n:95,q:"Filtr uwagowy w teorii Broadbenta działa na zasadzie:",o:["«wszystko albo nic»","semantycznej","osłabiacza","selekcji w oparciu o priorytety"],c:0},
+{n:96,q:"Teoria kompromisowa między wczesną a późną selekcją to teoria:",o:["filtra Broadbenta","Deutscha i Ravena","osłabiacza Treisman","emulatora Kahnemana"],c:2},
+{n:97,q:"Spór wczesna vs. późna selekcja dotyczył problemu:",o:["lemat spóźnionego kontrolera","paradoks inteligentnej selekcji","dylemat zegarowy Mcwortha","sylogizm mrugnięcia letalnego"],c:1},
+{n:98,q:"Wg Lavie czynnikiem decydującym o poziomie selekcji jest:",o:["obciążenie percepcyjne","ładunek submisyjny","gradient dystrakcji","parakonsystencja dystrakcyjna"],c:0},
+{n:99,q:"Teorię uwagi odwołującą się do alokacji zasobów sformułował:",o:["Damasio","Broadbent","Kahneman","a, b i c są błędne"],c:2},
+{n:100,q:"W odniesieniu do uwagi mówi się o interferencji:",o:["strukturalnej i zasobowej","strategicznej i akcydentalnej","demencyjnej i progresywnej","a, b i c są błędne"],c:0},
+{n:101,q:"Teoria Allporta – obniżenie wykonania w zadaniach równoczesnych to interferencja:",o:["zasobowa","strukturalna","rezydualna","rezonansowa"],c:1},
+{n:102,q:"Główne ośrodki sterujące uwagą znajdują się w płacie:",o:["czołowym i ciemieniowym","skroniowym i potylicznym","skroniowym","potylicznym"],c:0},
+{n:103,q:"Model Corbetty i Shulmana (2002) wyjaśnia:",o:["mechanizmy pamięci proceduralnej","różnice między uwagą selektywną a wykonawczą","rolę automatycznej i kontrolowanej orientacji uwagi","funkcjonowanie układu równowagi"],c:2},
+{n:104,q:"Niezauważanie celu 200-500 ms po innym celu to:",o:["mrugnięcie progresywne","ślepota reaktywna","ślepota targetowa","mrugnięcie uwagowe"],c:3},
+{n:105,q:"W eksperymencie Simonsa i Levina (1998) między rozmówcami przechodziły osoby:",o:["ubrane w stroje kąpielowe","niosące drzwi","trzymające pochodnie","trzymające białe króliki"],c:1},
+{n:106,q:"Obiekt wzrokowy znajdowany natychmiast, niezależnie od dystraktorów – zjawisko:",o:["wyskakiwania (pop out)","wyjaśniania (clearing)","wyostrzania (sharping)","a, b i c są błędne"],c:0},
+{n:107,q:"Duncan i Humphreys – wydajność przeszukiwania wzrokowego zależy od:",o:["wszystkich wymienionych","podobieństwa celu i dystraktorów","liczby obiektów","podobieństwa między dystraktorami"],c:0},
+{n:108,q:"Treisman i Gelade (1980) prezentowali tablice ze znakami:",o:["brązowe «T» lub zielone «X»","niebieskie cyfry «1» lub fluorescencyjne litery","senegalskie ideogramy","litery cyrylicy lub symbole nieskończoności"],c:0},
+{n:109,q:"O'Craven, Downing i Kanwisher (1999) nakładali na siebie obrazy:",o:["kwiaty i samochody","twarze i budynki","wodoloty i akwedukty","konie i słonie morskie"],c:1},
+{n:110,q:"Jedną z cech procesów automatycznych jest ich:",o:["bilateralność","balistyczność","leptosomatyczność","bimodalność"],c:1},
+{n:111,q:"Shiffrin i Schneider – oprócz jawnych wyróżniają procesy:",o:["zawoalowane (veiled)","egzemplifikowane (exemplified)","parakosystentne","prozylityczne"],c:0},
+{n:112,q:"Zdolność uwagi do przełączania się między zadaniami to:",o:["rzutkość","przerzutność","emergentność","a, b i c są błędne"],c:1},
+{n:113,q:"Nieredukowalne koszty przerzutności uwagi to koszty:",o:["Otella","Elektry","rezydualne","recyprokalne"],c:2},
+{n:114,q:"Rogers i Monsell (1995) wprowadzili pojęcie:",o:["zbioru ortogonalnego","zestawu zadaniowego","sekrecji tachistoskopowej","skrzynki problemowej"],c:1},
+{n:115,q:"System odpowiedzialny za selekcję informacji to:",o:["świadomość fenomenalna","system qualiów","uwaga","a, b i c są błędne"],c:2},
+{n:116,q:"Davies i Parasuraman – spadek koncentracji wyjaśnia się analizą:",o:["poziomu pobudzenia (aktywacji)","poziomu estrogenów","orientacji allocentrycznej","a, b i c są błędne"],c:0},
+{n:117,q:"Jedną z technik badania słyszenia rozdzielnousznego jest technika:",o:["filtra","cienia","szklanki","opowiadania"],c:1},
+{n:118,q:"Cherry – twórca paradygmatu:",o:["dychotycznej prezentacji bodźców","diachronicznej metody prymowania","diagonalnego treningu uważności","decepcyjnego torowania uwagowego"],c:0},
+{n:119,q:"Technika podążania to modyfikacja techniki:",o:["dynamicznej prezentacji szumów","dwuusznej demencji przewodzeniowej","dywergencyjnej selekcji","dychotycznej prezentacji bodźców"],c:3},
+{n:120,q:"Treisman (1970) – ludzie dokonują fuzji słów z różnych:",o:["kategorii syntaktycznych","kanałów sensorycznych","pól ejdetycznych","perceptów semiotycznych"],c:1},
+{n:121,q:"Hunt i Lansman (1982) – schemat testowania dwóch czynności:",o:["«od łatwego do trudnego»","«od trzech do jednego»","«cztery szybko, dwa powoli»","«od geonów do symboli»"],c:0},
+{n:122,q:"Test DIVA wykorzystywano do badania:",o:["wrażliwości błony bębenkowej","uwagi","reminiscencji","implantów pamięciowych"],c:1},
+{n:123,q:"Efekt interferencji Stroopa to jedno z najsłynniejszych zjawisk:",o:["Gallupa","Stroopa","Tulupa","Tulvinga"],c:1},
+{n:124,q:"Zależność między pobudzeniem a poziomem wykonania – prawo:",o:["Henry'ego Molaysona","Yerkesa-Dodsona","Holmesa-Watsona","deprywacji motorycznej"],c:1},
+{n:125,q:"Poprzedzanie podprogowe określane jest jako:",o:["subtelne","subliminalne","submisywne","submisyjne"],c:1},
+{n:126,q:"Fisher i Goodman – prymy podprogowe:",o:["mogą działać silniej niż nadprogowe","nie działają na umysł","zawsze słabsze niż nadprogowe","a, b i c są błędne"],c:0},
+{n:127,q:"Zwiększenie efektywności przetwarzania bodźca po ekspozycji na bodziec pokrewny to:",o:["oznaczanie syntaktyczne","generalizacja egzaptacyjna","prymowanie koncepcyjne","uprzedzanie letalne"],c:2},
+{n:128,q:"Murphy i Zajonc (1993) – w badaniach afektu i poznania wykorzystano:",o:["prymy parakonsystentne","chińskie ideogramy","japońskie idiografy","prymy redundantne"],c:1},
+{n:129,q:"Jedna z teorii przeszukiwania pola percepcyjnego to teoria:",o:["dysonansu sublinalnego","integracji cech","selekcji ortogonalnej","percepcji inercyjnej"],c:1},
+{s:"Pamięć",n:130,q:"Pacjent H.M. cierpiał przed operacją na:",o:["afazję","padaczkę","apraksję lewostronną","żadna z odpowiedzi"],c:1},
+{n:131,q:"H.M. uczono rysowania z wykorzystaniem:",o:["lustra","szkiców Chińskiego pokoju","maszyny Turinga","sztalug Amesa"],c:0},
+{n:132,q:"Niepamięć zdarzeń sprzed uszkodzenia mózgu, ale zachowane zapamiętywanie nowych – to:",o:["amnezja wsteczna","sublimacja wsteczna","amnezja następcza","sublimacja następcza"],c:0},
+{n:133,q:"Uszkodzenie hipokampa wpływa najbardziej na:",o:["pamięć krótkotrwałą","pamięć operacyjną","pamięć proceduralną","pamięć epizodyczną"],c:3},
+{n:134,q:"Szczególnie duży hipokamp posiadają zwierzęta:",o:["dla których ważna jest orientacja w przestrzeni","prowadzące pasożytniczy tryb życia","autotroficzne w wodach śródlądowych","pseudo-autotroficzne na drzewach liściastych"],c:0},
+{n:135,q:"Maguire i wsp. (2000) – większą tylną część hipokampa mają:",o:["londyńscy taksówkarze","pekińscy drukarze","moskiewskie skrzypaczki","bengalskie praczki"],c:0},
+{n:136,q:"Przyśrodkowa część płata skroniowego to jądro migdałowate i kompleks:",o:["hipokampa","przestrzeni wodociągowej","móżdżku","oliwki"],c:0},
+{n:137,q:"7 (±2) to:",o:["standardowy współczynnik Webera","liczba Millera","parametr Eschera","stała percepcyjna Fechnera"],c:1},
+{n:138,q:"Kluczowe osiągnięcie G. Millera w psychologii poznawczej:",o:["teoria pamięci krótkotrwałej o pojemności 7±2","teoria poziomów przetwarzania","modele koneksjonistyczne umysłu","metoda neuroobrazowania"],c:0},
+{n:139,q:"Centralny mechanizm wykonawczy (wg Baddeleya) to część:",o:["pamięci echoicznej","filtra wzrokowo-przestrzennego","pamięci operacyjnej","filtra uwagi dysjunktywnej"],c:2},
+{n:140,q:"Centralny system wykonawczy pełni funkcję:",o:["przechowywania krótkotrwałych wspomnień","kodowania wspomnień długotrwałych","przetwarzania informacji wzrokowych","koordynacji uwagi i zarządzania komponentami pamięci roboczej"],c:3},
+{n:141,q:"Bieżące przetwarzanie, koordynacja buforów i nadzór to funkcje:",o:["pętli fonologicznej","centralnego systemu wykonawczego","bufora epizodycznego","szkicownika wzrokowo-przestrzennego"],c:1},
+{n:142,q:"Wg Baddeleya system przechowujący krótko informacje wzrokowe i przestrzenne to:",o:["notes wzrokowo-przestrzenny","szkicownik fonologiczny","pętla ruchowo-przestrzenna","magazyn wertykalny"],c:0},
+{n:143,q:"Element szkicownika wzrokowo-przestrzennego:",o:["podręczny magazyn wzrokowy","ołówek mentalny","pióro percepcyjne","skrypt uwagowy"],c:0},
+{n:144,q:"Dowody fonologicznego charakteru pętli artykulacyjnej – procedura:",o:["szkicowania wstecznego","tłumienia artykulacyjnego","pasywnego nadzoru","buforowania epizodycznego"],c:1},
+{n:145,q:"Proces przedłużający czas przechowywania w pamięci krótkotrwałej:",o:["kodowanie","powtarzanie","konsolidacja","odtwarzanie"],c:1},
+{n:146,q:"Wg Craika i Lockharta (1972) zapamiętywanie zależy od:",o:["głębokości przetwarzania","subliminalnego przygotowania","modalnej latencji","wszystkie powyższe"],c:0},
+{n:147,q:"Teoria poziomów przetwarzania Craika i Lockharta zakłada:",o:["przetwarzanie hierarchiczne od prostych do złożonych","informacja przetwarzana przez te same struktury, ale na różnym poziomie głębokości","przetwarzanie wyłącznie na poziomie sensorycznym","uczenie się zależy wyłącznie od częstotliwości powtórzeń"],c:1},
+{n:148,q:"Model pamięci Atkinsona i Shiffrina to przykład:",o:["blokowego modelu umysłu","koneksjonizmu","sieciowego modelu umysłu","teorii poziomów przetwarzania"],c:0},
+{n:149,q:"Pamięć jako system wielu odrębnych magazynów – modele:",o:["konekcyjne","blokowe","schodkowe","rekursywne"],c:1},
+{n:150,q:"Odrębność STM i LTM – zjawisko tzw. podwójnej:",o:["egzapacji","adaptacji","dysocjacji","eliminacji"],c:2},
+{n:151,q:"Sperling w badaniach pamięci sensorycznej używał prezentacji:",o:["tachistoskopowej","subliminowalnej","dendroskopowej","stroboskanowej"],c:0},
+{n:152,q:"Pamięć percepcyjna to rodzaj pamięci:",o:["proceduralnej","utajonej","koncepcyjnej","taki termin nie istnieje"],c:1},
+{n:153,q:"Odpowiedź na pytanie, kto założył pierwsze laboratorium, daje nam:",o:["pamięć semantyczna","pamięć ikoniczna","pamięć proceduralna","pamięć skryta"],c:0},
+{n:154,q:"Efekt autoreferencji dotyczy:",o:["tzw. komórek zajęczych","percepcji barw","pamięci","obrazów stroboskopowych"],c:2},
+{n:155,q:"Born (2005) i Ekstrand (1971) – pozytywny wpływ na pamięć proceduralną ma:",o:["abdukcja wolnofalowa","sublimacja percepcyjna","recesja pętli epizodycznej","sen w fazie REM"],c:3},
+{n:156,q:"Stopniowe stabilizowanie się śladu pamięciowego to:",o:["ingracjacja","emancypacja mnemoniczna","konsolidacja","rewerberacja"],c:2},
+{n:157,q:"Wielkoskalowe zmiany strukturalne tworzące trwały ślad pamięciowy to:",o:["reaktywacja","konsolidacja systemowa","konsolidacja synaptyczna","rekapitulacja"],c:2},
+{n:158,q:"Konsolidacja systemowa trwa:",o:["znacznie dłużej od konsolidacji synaptycznej","krócej od synaptycznej u osób leworęcznych","krócej od synaptycznej","tyle samo co synaptyczna"],c:0},
+{n:159,q:"Nowa wiedza oddziałuje wstecznie destruktywnie na starszą – to:",o:["wzmocnienie obrazów interaktywnych","interferencja retroaktywna","progresywna konsolidacja","wszystkie powyższe"],c:1},
+{n:160,q:"McGeoch i McDonalds (1931) badali wielkość interferencji zależnie od:",o:["podobieństwa materiału do zapamiętania","gradientu paralaksy","kąta rotacji mentalnych","ilości geonów i flankerów"],c:0},
+{n:161,q:"Efekt końca języka jest dowodem na mechanizm:",o:["Ebbinghausa","końca języka (utrata dostępu do informacji)","głuchego ucha","paralityka"],c:1},
+{n:162,q:"Zjawisko reminiscencji wykryto w przypadku:",o:["uwagi allotropowej","pamięci epizodycznej","hemiotaksji jednostronnej","interferencji geonów"],c:1},
+{n:163,q:"Efekt pierwszeństwa współwystępuje z efektem:",o:["świeżości","następstwa","zwolnienia","a, b i c są błędne"],c:0},
+{n:164,q:"Fałszywe wspomnienia badała:",o:["G. Posner","E. Loftus","H. Molison","A. Łuria"],c:1},
+{n:165,q:"Loftus i Palmer (1974) zajmowali się:",o:["reaktancją bufora sensorycznego","abdukcją kognitywną","pamięcią świadków","fenomenem idolatrii"],c:2},
+{n:166,q:"Ogólna wiedza nakłada się na wspomnienia, by do niej pasowały – to:",o:["ingracjacja myśli","indukcyjna koniunkcja engramów","tendencyjność przekonań","subliminalność przekonaniowa"],c:2},
+{n:167,q:"Penfield wywoływał wspomnienia pacjentów:",o:["drażniąc prądem elektrycznym płaty skroniowe","wprowadzając w stan hiperhipnotyczny","procedurą sublimacji retrospektywnej","podając napój o smaku wasabi"],c:0},
+{n:168,q:"Łuria badał zdolności pamięciowe:",o:["pracownika stacji benzynowej","reportera – Salomona Szereszewskiego","niemieckiej kelnerki – Emmy Zeigarov","robotnika kolejowego – Phineasa Gage'a"],c:1},
+{n:169,q:"Metoda miejsc to technika:",o:["mnemoniczna","subliminalna","emergentna","afektywna"],c:0},
+{n:170,q:"Czynnik pozytywnie wpływający na zapamiętywanie:",o:["elaboracja","inhibicja proaktywna","interferencja retroaktywna","deprywacja sensoryczna"],c:0},
+{n:171,q:"Jaśkowski cytuje relację Ecclesa – sen Otto Loewiego o eksperymencie z:",o:["nerwem błędnym żaby","móżdżkiem kozy afgańskiej","modelem genploracji memetycznej","skryptami epigenetycznymi"],c:0},
+{s:"Wiedza i reprezentacje",n:172,q:"Różnica między reprezentacją obrazową a propozycjonalną:",o:["Obrazowa oparta na abstrakcyjnych twierdzeniach","Propozycjonalna zawsze dokładniejsza niż obrazowa","Obie działają identycznie","Obrazowa odwzorowuje wygląd obiektu, propozycjonalna koduje info w formie sądów"],c:3},
+{n:173,q:"Spór o naturę wyobrażeń toczył się między stanowiskami:",o:["obrazowym i hipotetycznym","twierdzeniowym i propozycjonalnym","obrazowym i propozycjonalnym","powyższe są błędne"],c:2},
+{n:174,q:"Elementy reprezentacji obrazowych w teorii Kosslyna:",o:["Komponent powierzchniowy i głęboki","Warstwy percepcyjne i werbalne","Procesy adaptacyjne i kompensacyjne","Hipotezy abstrakcyjne i konkretne"],c:0},
+{n:175,q:"Znany z badań nad skanningiem umysłowym jest:",o:["Stephen Kosslyn","Alan Paivio","Zenon Pylyshyn","John Anderson"],c:0},
+{n:176,q:"Teoria Kosslyna zakłada funkcjonalną równoważność:",o:["pamięci i wyobraźni","percepcji i wyobraźni","pamięci i mowy","percepcji i mowy"],c:1},
+{n:177,q:"Shepard i Chipman (1971) – ocena podobieństwa kształtu stanów USA wskazywała na:",o:["parakonsystencję wyobraźni","funkcjonalną ekwiwalencję percepcji i wyobraźni","reprezentacje walencyjne","ejdetyczną ekwiwalencję prioprocepcji"],c:1},
+{n:178,q:"Teoria podwójnego kodowania Paivio – człowiek tworzy reprezentacje w:",o:["jednym systemie – werbalnym","dwóch systemach – werbalnym i niewerbalnym","dwóch – werbalnym i dotykowym","trzech – niewerbalnym, werbalnym i metawerbalnym"],c:1},
+{n:179,q:"Niemożność tworzenia wyobrażeń to:",o:["akinetopsja","analgezja","afantazja","abulia"],c:2},
+{n:180,q:"Twórcą modelu ACT* jest:",o:["Stephen Kosslyn","Alan Paivio","Zenon Pylyshyn","John Anderson"],c:3},
+{n:181,q:"Abstrakcja pozytywna to:",o:["wyodrębnienie cech istotnych","pominięcie cechy istotnej","pominięcie cech elenktywnych","redundancja cech"],c:0},
+{n:182,q:"W klasycznej teorii pojęć struktura pojęcia obejmuje:",o:["listę uśrednionych cech","listę cech koniecznych i niewystarczających","listę cech niekoniecznych i wystarczających","listę cech koniecznych i wystarczających"],c:3},
+{n:183,q:"Teorię prototypów sformułowała:",o:["Alan Paivio","Eleanor Rosch","Philip Johnson-Laird","Stephen Kosslyn"],c:1},
+{n:184,q:"Wg Rosch reprezentacje pojęciowe z poziomu podstawowego wymiaru pionowego:",o:["duża szczegółowość opisu","spontanicznie wymieniane przez badanych jako przykłady kategorii","żadna z podanych","niewielka liczba cech"],c:1},
+{n:185,q:"Lewicki w badaniach wykorzystywał pojęcie «klipiec», które było:",o:["sztucznym","naturalnym","probabilistycznym","powyższe są błędne"],c:0},
+{n:186,q:"Kluczowa cecha pojęć naturalnych vs. matrycowych:",o:["ostre granice, nie podlegają zmianom","precyzyjne definicje, ścisłe cechy istotne","elastyczne, zależne od kontekstu i doświadczenia","stosowane wyłącznie w naukach ścisłych"],c:2},
+{n:187,q:"Prototypy – najbliższe prawdy twierdzenie:",o:["wspólne dla badanych z tej samej populacji","nie różnią się w zależności od kultury","ludzie wytwarzają zupełnie różne, nieporównywalne prototypy","prototypy to wrodzona reprezentacja"],c:0},
+{n:188,q:"Kluczowe w teorii ram Minsky'ego:",o:["Stałe elementy struktury i «okienka» na elastyczne informacje","Węzły semantyczne i połączenia","Prototypy typowych egzemplarzy","Porównywanie z pierwszym egzemplarzem"],c:0},
+{n:189,q:"Teoria modeli mentalnych Johnsona-Lairda zakłada:",o:["Umysł operuje wyłącznie obrazami umysłowymi","Ludzie tworzą nietrwałe reprezentacje słowno-obrazowe pomagające wyciągać wnioski","Przetwarzanie opiera się na schematach odziedziczonych genetycznie","Wszystkie procesy poznawcze wynikają z percepcji"],c:1},
+{n:190,q:"«Wiem, że nic nie wiem» to przykład:",o:["uberwiedzy","neowiedzy","metawiedzy","inwiedzy"],c:2},
+{n:191,q:"Wiedza o wiedzy to:",o:["metawiedza","wiedza deklarowana","wiedza milcząca","nadwiedza"],c:0},
+{n:192,q:"Dwa rodzaje wiedzy wg Gilberta Ryle'a:",o:["proceduralna i semantyczna","«że» i «jak»","jawna i ukryta","epizodyczna i autobiograficzna"],c:1},
+{n:193,q:"Wiedza deklaratywna i proceduralna – najbliższe prawdy:",o:["deklaratywną można przekształcić w proceduralną","deklaratywną w proceduralną, nigdy odwrotnie","proceduralną w deklaratywną, nigdy odwrotnie","nigdy nie można ich przekształcać"],c:0},
+{n:194,q:"Reprezentacje umysłowe to:",o:["mechanizmy tworzenia struktur poznawczych","ogólny obraz świata w umyśle i jego składniki","tylko schematy poznawcze","tylko wyobrażenia"],c:1},
+{n:195,q:"Efekt dystansu numerycznego oznacza, że porównanie bliższych liczb zajmuje więcej czasu:",o:["efekt czystej ekspozycji","efekt luki empatycznej","efekt Pigmaliona","efekt dystansu numerycznego"],c:3},
+{n:196,q:"Skłonność do upraszczania i stosowania schematów tłumaczy teoria:",o:["zewnątrzsterowności Tolmana","rozwoju poznawczego Piageta","informacji Shannona i Longmana","skąpca poznawczego Fiske i Taylor"],c:3},
+{n:197,q:"Wskaż nieprawdziwe twierdzenie o teorii podwójnego kodowania:",o:["zakłada istnienie dwóch niemal identycznych systemów reprezentowania rzeczywistości introspekcyjnej","system niewerbalny obejmuje pięć podsystemów","zakłada istnienie imagenów i logogenów","stworzył ją Alan Paivio"],c:0},
+{s:"Świadomość i umysł",n:198,q:"Qualia to:",o:["jakościowo swoiste subiektywne stany świadomości","nieswoiste obiektywne stany semantyczne","rzetelnie zmierzone stany świadomości","trafne postawy propozycjonalne"],c:0},
+{n:199,q:"Poznawalne, jakościowe cechy tego, co dane – niewyrażalne, prywatne – to:",o:["memy","qualia","logageny","propozycjonalia"],c:1},
+{n:200,q:"Ned Block wyróżnił świadomość fenomenalną, samoświadomość oraz świadomość:",o:["dostępu","liminalną","allocentryczną","sublimalną"],c:0},
+{n:201,q:"Wg Dennetta umysł to:",o:["«armia idiotów»","«korporacja pustych slotów»","«pokój Turinga bez okien»","«pokój Turinga wypełniony mrokiem»"],c:0},
+{n:202,q:"Dennett w kontekście świadomości pisał o rewizjach:",o:["orwellowskich","filokreatywnych","ontogentycznych","lermontowskich"],c:0},
+{n:203,q:"Dennett wskazuje na problemy metodologiczne z badaniem:",o:["błędów aproksymacji","błędów koniunkcji","błędów alternatywy","świadomości"],c:3},
+{n:204,q:"Searle sformułował eksperyment myślowy:",o:["Chiński pokój","Kantoński niepokój","Mandżurski worek","Koreański korek"],c:0},
+{n:205,q:"«Pokój Marii» (F. Jackson) to:",o:["rodzaj pokoju Amosa","rodzaj pokoju Amesa","eksperyment myślowy","przypadek zasady koneksyjnej"],c:2},
+{n:206,q:"Velmans sformułował empiryczne kryteria:",o:["regresji mnemonicznej","świadomości","reminiscencji","rewerberacji"],c:1},
+{n:207,q:"Pojęcie «czarnej skrzynki» (bodziec → reakcja) wprowadzili:",o:["behawioryści","frenolodzy","neurobiolodzy","lombrozianie"],c:0},
+{n:208,q:"Koneksjonizm w psychologii poznawczej zajmuje się:",o:["wpływem emocji na pamięć","modelowaniem procesów poznawczych przy użyciu sieci neuropodobnych","analizą świadomości na poziomie filozoficznym","wpływem języka na rozwój umysłowy"],c:1},
+{n:209,q:"W latach 90. XX w. nastąpił renesans problematyki:",o:["pamięci sensorycznej","świadomości","odruchów warunkowych","odruchów bezwarunkowych"],c:1},
+{n:210,q:"Schematy eksploracyjne wg Neissera to:",o:["wrodzone schematy poznawcze","nabywane w wieku nastoletnim","nabywane w późnej starości","żadne z powyższych"],c:0}
+];
+
+var S=[],cs=null,ta=0,tc=0,fw=false,st=[];
+for(var i=0;i<Q.length;i++){st.push(-1);if(Q[i].s){cs={nm:Q[i].s,a:i,b:i,ok:0,ans:0};S.push(cs)}if(cs)cs.b=i}
+
+function render(){
+var h='',si=0,L='abcd';
+for(var i=0;i<Q.length;i++){var q=Q[i];
+if(q.s){var s=S[si],cnt=s.b-s.a+1;
+h+='<div class="st" id="s'+si+'"><span>'+q.s+' ('+cnt+' pyt.)</span><span class="ss" id="ss'+si+'"></span></div>';si++}
+h+='<div class="qc" id="q'+i+'"><div class="qn">Pytanie '+q.n+' / 210</div><div class="qt">'+q.q+'</div><div class="opts">';
+for(var j=0;j<q.o.length;j++){h+='<label class="op" id="o'+i+'_'+j+'" onclick="pk('+i+','+j+')"><input type="radio" name="r'+i+'" value="'+j+'"><span>'+L[j]+') '+q.o[j]+'</span></label>'}
+h+='</div><div class="fb" id="f'+i+'"></div></div>'}
+document.getElementById('ct').innerHTML=h;
+var nav=document.getElementById('cn');
+nav.innerHTML=S.map(function(s,i){return '<button class="cb" onclick="document.getElementById(\'s'+i+'\').scrollIntoView({behavior:\'smooth\'})">'+s.nm+' <span id="cs'+i+'"></span></button>'}).join('')}
+
+function pk(i,j){
+if(st[i]!==-1)return;st[i]=j;
+var q=Q[i],ok=j===q.c,card=document.getElementById('q'+i),fb=document.getElementById('f'+i);
+var ops=card.querySelectorAll('.op');
+for(var k=0;k<ops.length;k++){ops[k].classList.add('lk');if(k===q.c)ops[k].classList.add('gc');if(k===j&&!ok)ops[k].classList.add('gw')}
+if(ok){card.classList.add('ok');fb.className='fb fok';fb.textContent='\u2713 Poprawna odpowied\u017a!';tc++}
+else{card.classList.add('bad');fb.className='fb fno';fb.textContent='\u2717 B\u0142\u0119dna. Poprawna: '+'abcd'[q.c]+') '+q.o[q.c]}
+ta++;
+for(var k=0;k<S.length;k++){if(i>=S[k].a&&i<=S[k].b){S[k].ans++;if(ok)S[k].ok++;break}}
+us()}
+
+function us(){
+var p=Math.round(ta/Q.length*100);
+document.getElementById('pf').style.width=p+'%';
+document.getElementById('status').textContent='Odpowiedziano: '+ta+' / '+Q.length;
+if(ta>0){var sp=Math.round(tc/ta*100);document.getElementById('sl').innerHTML='\u2713 '+tc+' poprawnych \u00b7 \u2717 '+(ta-tc)+' b\u0142\u0119dnych \u00b7 '+sp+'% skuteczno\u015bci'}
+for(var i=0;i<S.length;i++){var e1=document.getElementById('ss'+i),e2=document.getElementById('cs'+i);if(S[i].ans>0){var t=S[i].ok+'/'+S[i].ans;if(e1)e1.textContent=t;if(e2)e2.textContent='('+t+')'}}}
+
+function tf(){
+fw=!fw;document.getElementById('fb').textContent=fw?'Poka\u017c wszystkie':'Poka\u017c tylko b\u0142\u0119dne';
+for(var i=0;i<Q.length;i++){var c=document.getElementById('q'+i);if(fw&&st[i]!==-1&&st[i]===Q[i].c)c.classList.add('hd');else c.classList.remove('hd')}
+for(var i=0;i<S.length;i++){var el=document.getElementById('s'+i);if(fw){var vis=false;for(var j=S[i].a;j<=S[i].b;j++){if(st[j]===-1||st[j]!==Q[j].c){vis=true;break}}el.classList.toggle('hd',!vis)}else el.classList.remove('hd')}}
+
+function ra(){
+ta=0;tc=0;fw=false;for(var i=0;i<st.length;i++)st[i]=-1;
+for(var i=0;i<S.length;i++){S[i].ok=0;S[i].ans=0}
+document.getElementById('fb').textContent='Poka\u017c tylko b\u0142\u0119dne';
+document.getElementById('sl').innerHTML='';render();us();window.scrollTo({top:0,behavior:'smooth'})}
+
+render();us();
+</script>
+</body>
 </html>
