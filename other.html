@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyApp – Inne quizy</title>
+<link rel="stylesheet" href="css/theme.css">
+<style>
+  .empty-state {
+    text-align: center;
+    padding: 80px 20px;
+  }
+  .empty-icon {
+    width: 80px; height: 80px; border-radius: 24px;
+    margin: 0 auto 24px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.2rem;
+    background: rgba(251,146,60,.1); border: 1px solid rgba(251,146,60,.15);
+  }
+  .empty-state h2 {
+    font-size: 1.4rem; font-weight: 800;
+    background: linear-gradient(135deg, #fed7aa, #fb923c);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+  .empty-state p { opacity: .45; max-width: 400px; margin: 0 auto; font-size: .92rem; }
+  .coming-list {
+    display: flex; flex-direction: column; gap: 10px;
+    max-width: 440px; margin: 32px auto 0;
+  }
+  .coming-item {
+    padding: 16px 20px; border-radius: var(--radius);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .coming-item .ci-icon {
+    width: 40px; height: 40px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+  .coming-item .ci-icon.o { background: rgba(251,146,60,.12); }
+  .coming-item .ci-icon.p { background: rgba(244,114,182,.12); }
+  .coming-item .ci-icon.b { background: rgba(96,165,250,.12); }
+  .coming-item h4 { font-size: .9rem; font-weight: 800; }
+  .coming-item p { font-size: .78rem; opacity: .45; margin-top: 2px; }
+  .badge-soon {
+    margin-left: auto;
+    padding: 3px 10px; border-radius: 8px;
+    font-size: .68rem; font-weight: 700; font-family: var(--mono);
+    background: rgba(251,146,60,.12); color: #fb923c;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script>Auth.requireAuth(); buildNav("other");</script>
+
+<div class="page">
+  <div class="empty-state fade-in">
+    <div class="empty-icon">🚧</div>
+    <h2>Quiz pojawi się wkrótce</h2>
+    <p>Pracujemy nad nowymi materiałami. Poniżej znajdziesz planowane quizy.</p>
+  </div>
+
+  <div class="coming-list">
+    <div class="coming-item glass fade-in-d1">
+      <div class="ci-icon o">📝</div>
+      <div>
+        <h4>Psychologia Społeczna</h4>
+        <p>Pytania z egzaminów z psychologii społecznej</p>
+      </div>
+      <span class="badge-soon">Wkrótce</span>
+    </div>
+
+    <div class="coming-item glass fade-in-d2">
+      <div class="ci-icon p">📊</div>
+      <div>
+        <h4>Metodologia Badań</h4>
+        <p>Quiz z metodologii i statystyki</p>
+      </div>
+      <span class="badge-soon">Wkrótce</span>
+    </div>
+
+    <div class="coming-item glass fade-in-d3">
+      <div class="ci-icon b">🧬</div>
+      <div>
+        <h4>Neuropsychologia</h4>
+        <p>Podstawy neuropsychologii klinicznej</p>
+      </div>
+      <span class="badge-soon">Wkrótce</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>

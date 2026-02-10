@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyApp – Logowanie</title>
+<link rel="stylesheet" href="css/theme.css">
+<style>
+  .login-wrap {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .login-box {
+    width: 100%; max-width: 400px;
+    border-radius: 24px; padding: 40px 32px;
+    text-align: center;
+  }
+  .login-box h1 {
+    font-size: 1.6rem; font-weight: 800; letter-spacing: -.03em;
+    background: linear-gradient(135deg, #e0e7ff, var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 6px;
+  }
+  .login-box .subtitle {
+    font-size: .88rem; opacity: .5; font-weight: 500; margin-bottom: 32px;
+  }
+  .field { margin-bottom: 16px; text-align: left; }
+  .field label {
+    display: block; font-size: .78rem; font-weight: 700;
+    opacity: .6; margin-bottom: 6px; letter-spacing: .3px;
+  }
+  .field input {
+    width: 100%; padding: 12px 16px;
+    border-radius: 14px; border: 1.5px solid var(--glass-border);
+    background: rgba(255,255,255,.05);
+    color: #fff; font-family: var(--font); font-size: .92rem;
+    outline: none; transition: border-color .2s;
+  }
+  .field input:focus { border-color: var(--accent); }
+  .field input::placeholder { color: rgba(255,255,255,.25); }
+  .login-btn {
+    width: 100%; padding: 14px;
+    border-radius: 14px; border: none;
+    background: linear-gradient(135deg, rgba(99,102,241,.7), rgba(168,85,247,.7));
+    color: #fff; font-family: var(--font); font-size: .95rem; font-weight: 800;
+    cursor: pointer; transition: all .15s; margin-top: 8px;
+  }
+  .login-btn:hover { filter: brightness(1.15); }
+  .login-btn:active { transform: scale(.98); }
+  .error-msg {
+    margin-top: 14px; padding: 10px 14px;
+    border-radius: 12px;
+    background: var(--red-bg); border: 1px solid var(--red-border);
+    color: #fca5a5; font-size: .84rem; font-weight: 700;
+    display: none;
+  }
+  .error-msg.show { display: block; animation: fadeUp .3s ease; }
+  .lock-icon {
+    width: 56px; height: 56px; margin: 0 auto 20px;
+    border-radius: 50%;
+    background: var(--accent-bg); border: 1px solid rgba(167,139,250,.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+  }
+</style>
+</head>
+<body>
+<div class="login-wrap">
+  <div class="login-box glass fade-in">
+    <div class="lock-icon">🔒</div>
+    <h1>StudyApp</h1>
+    <p class="subtitle">Zaloguj się, aby kontynuować naukę</p>
+
+    <form id="loginForm" onsubmit="return handleLogin(event)">
+      <div class="field">
+        <label>LOGIN</label>
+        <input type="text" id="userInput" placeholder="Wpisz login" autocomplete="off" autofocus>
+      </div>
+      <div class="field">
+        <label>HASŁO</label>
+        <input type="password" id="passInput" placeholder="Wpisz hasło">
+      </div>
+      <button type="submit" class="login-btn">Zaloguj się</button>
+    </form>
+
+    <div class="error-msg" id="errorMsg">Nieprawidłowy login lub hasło</div>
+  </div>
+</div>
+
+<script src="js/auth.js"></script>
+<script>
+  // If already logged in, redirect
+  if (Auth.isLoggedIn()) {
+    window.location.href = "dashboard.html";
+  }
+
+  function handleLogin(e) {
+    e.preventDefault();
+    var user = document.getElementById("userInput").value.trim();
+    var pass = document.getElementById("passInput").value;
+
+    if (Auth.login(user, pass)) {
+      window.location.href = "dashboard.html";
+    } else {
+      var err = document.getElementById("errorMsg");
+      err.classList.remove("show");
+      void err.offsetWidth; // reflow
+      err.classList.add("show");
+      document.getElementById("passInput").value = "";
+      document.getElementById("passInput").focus();
+    }
+    return false;
+  }
+</script>
+</body>
+</html>

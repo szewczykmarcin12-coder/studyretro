@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyApp – Fiszki</title>
+<link rel="stylesheet" href="css/theme.css">
+<style>
+  .fc-header { text-align: center; padding: 28px 0 8px; }
+  .fc-header h1 {
+    font-size: 1.4rem; font-weight: 800;
+    background: linear-gradient(135deg, #d1fae5, var(--green));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .fc-header p { opacity: .45; font-size: .88rem; margin-top: 4px; }
+  .fc-stats {
+    text-align: center; margin: 14px 0;
+    font-family: var(--mono); font-size: .78rem; opacity: .5;
+  }
+
+  /* Card flip */
+  .fc-scene {
+    width: 100%; max-width: 520px; height: 280px;
+    margin: 20px auto; perspective: 800px;
+    cursor: pointer;
+  }
+  .fc-card {
+    width: 100%; height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform .5s cubic-bezier(.4,.2,.2,1);
+  }
+  .fc-card.flipped { transform: rotateY(180deg); }
+  .fc-face {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    border-radius: var(--radius); padding: 28px 24px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .fc-front {
+    background: rgba(99,102,241,.1);
+    border: 1.5px solid rgba(99,102,241,.2);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  }
+  .fc-back {
+    background: rgba(16,185,129,.1);
+    border: 1.5px solid rgba(52,211,153,.2);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    transform: rotateY(180deg);
+  }
+  .fc-label {
+    font-size: .7rem; font-weight: 700; font-family: var(--mono);
+    opacity: .4; margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase;
+  }
+  .fc-text {
+    font-size: 1.15rem; font-weight: 800; line-height: 1.5;
+  }
+  .fc-back .fc-text { font-size: .95rem; font-weight: 500; line-height: 1.6; }
+  .fc-cat {
+    position: absolute; top: 14px; left: 18px;
+    font-size: .68rem; font-weight: 700; font-family: var(--mono);
+    padding: 3px 9px; border-radius: 8px;
+    background: rgba(255,255,255,.08); color: rgba(255,255,255,.45);
+  }
+  .fc-hint {
+    position: absolute; bottom: 14px;
+    font-size: .72rem; opacity: .3;
+  }
+
+  /* Controls */
+  .fc-controls {
+    display: flex; justify-content: center; gap: 10px;
+    margin: 20px 0; flex-wrap: wrap;
+  }
+  .fc-controls .btn { min-width: 100px; justify-content: center; }
+
+  /* Know/don't know */
+  .fc-judge { display: flex; justify-content: center; gap: 12px; margin: 10px 0; }
+  .fc-judge .btn { min-width: 130px; justify-content: center; font-size: .88rem; }
+
+  @media (max-width: 640px) {
+    .fc-scene { height: 240px; }
+    .fc-text { font-size: 1rem; }
+    .fc-back .fc-text { font-size: .88rem; }
+  }
+</style>
+</head>
+<body>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="data/flashcards-data.js"></script>
+<script>Auth.requireAuth(); buildNav("flashcards");</script>
+
+<div class="page">
+  <div class="fc-header fade-in">
+    <h1>Fiszki</h1>
+    <p>Kliknij kartę, aby ją odwrócić</p>
+  </div>
+
+  <div class="pill-scroll fade-in-d1">
+    <div class="pills" id="catPills"></div>
+  </div>
+
+  <div class="fc-stats" id="fcStats"></div>
+
+  <div class="fc-scene fade-in-d2" id="fcScene" onclick="flipCard()">
+    <div class="fc-card" id="fcCard">
+      <div class="fc-face fc-front">
+        <span class="fc-cat" id="fcCat"></span>
+        <div class="fc-label">Pojęcie</div>
+        <div class="fc-text" id="fcFront"></div>
+        <div class="fc-hint">Kliknij, aby odwrócić</div>
+      </div>
+      <div class="fc-face fc-back">
+        <span class="fc-cat" id="fcCatBack"></span>
+        <div class="fc-label">Definicja</div>
+        <div class="fc-text" id="fcBack"></div>
+        <div class="fc-hint">Kliknij ponownie</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fc-judge" id="fcJudge">
+    <button class="btn danger" onclick="markCard(false)">✗ Nie umiem</button>
+    <button class="btn success" onclick="markCard(true)">✓ Umiem</button>
+  </div>
+
+  <div class="fc-controls">
+    <button class="btn" onclick="prevCard()">← Poprzednia</button>
+    <button class="btn accent" onclick="shuffleDeck()">🔀 Losuj</button>
+    <button class="btn" onclick="nextCard()">Następna →</button>
+  </div>
+
+  <div style="text-align:center;margin-top:12px">
+    <button class="btn" onclick="resetProgress()">Resetuj postęp</button>
+  </div>
+</div>
+
+<div class="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+
+<script>
+var activeCat = "all";
+var deck = [];
+var idx = 0;
+var known = {};  // track which cards user knows
+
+function getCats() {
+  var cats = [];
+  FLASHCARDS.forEach(function(f) {
+    if (cats.indexOf(f.cat) === -1) cats.push(f.cat);
+  });
+  return cats;
+}
+
+function buildPills() {
+  var cats = getCats();
+  var h = '<button class="pill' + (activeCat === "all" ? " active" : "") + '" onclick="setCat(\'all\')">Wszystkie<span class="pill-meta">(' + FLASHCARDS.length + ')</span></button>';
+  cats.forEach(function(c) {
+    var cnt = FLASHCARDS.filter(function(f){ return f.cat === c; }).length;
+    h += '<button class="pill' + (activeCat === c ? " active" : "") + '" onclick="setCat(\'' + c + '\')">' + c + '<span class="pill-meta">(' + cnt + ')</span></button>';
+  });
+  document.getElementById("catPills").innerHTML = h;
+}
+
+function buildDeck() {
+  if (activeCat === "all") {
+    deck = FLASHCARDS.map(function(_, i){ return i; });
+  } else {
+    deck = [];
+    FLASHCARDS.forEach(function(f, i) {
+      if (f.cat === activeCat) deck.push(i);
+    });
+  }
+  idx = 0;
+}
+
+function setCat(c) {
+  activeCat = c;
+  buildPills();
+  buildDeck();
+  showCard();
+}
+
+function showCard() {
+  if (deck.length === 0) return;
+  if (idx < 0) idx = deck.length - 1;
+  if (idx >= deck.length) idx = 0;
+
+  var f = FLASHCARDS[deck[idx]];
+  document.getElementById("fcFront").textContent = f.front;
+  document.getElementById("fcBack").textContent = f.back;
+  document.getElementById("fcCat").textContent = f.cat;
+  document.getElementById("fcCatBack").textContent = f.cat;
+  document.getElementById("fcCard").classList.remove("flipped");
+  updateStats();
+}
+
+function flipCard() {
+  document.getElementById("fcCard").classList.toggle("flipped");
+}
+
+function nextCard() { idx++; showCard(); }
+function prevCard() { idx--; showCard(); }
+
+function shuffleDeck() {
+  for (var i = deck.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = deck[i]; deck[i] = deck[j]; deck[j] = t;
+  }
+  idx = 0;
+  showCard();
+}
+
+function markCard(isKnown) {
+  var cardIdx = deck[idx];
+  known[cardIdx] = isKnown;
+  nextCard();
+}
+
+function resetProgress() {
+  known = {};
+  updateStats();
+}
+
+function updateStats() {
+  var total = deck.length;
+  var knownCount = 0;
+  deck.forEach(function(di) { if (known[di]) knownCount++; });
+  document.getElementById("fcStats").textContent =
+    "Karta " + (idx + 1) + " / " + total + "  ·  Umiem: " + knownCount + " / " + total;
+}
+
+// Init
+buildPills();
+buildDeck();
+showCard();
+</script>
+</body>
+</html>

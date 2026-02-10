@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyApp – Procesy Poznawcze</title>
+<link rel="stylesheet" href="css/theme.css">
+<style>
+  .quiz-bar {
+    position: sticky; top: 56px; z-index: 100;
+    padding: 10px 0;
+    background: rgba(12,10,29,.65);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .quiz-bar-inner {
+    max-width: 960px; margin: 0 auto; padding: 0 16px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  .quiz-bar .prog-area { flex: 1; min-width: 150px; }
+  .quiz-bar .score-text {
+    font-family: var(--mono); font-size: .76rem; opacity: .6; margin-top: 3px;
+  }
+  .mode-tag {
+    font-size: .7rem; font-weight: 700; font-family: var(--mono);
+    padding: 4px 10px; border-radius: 8px;
+    background: var(--accent-bg); border: 1px solid rgba(167,139,250,.18);
+    color: var(--accent-bright);
+  }
+
+  /* Question card */
+  .qc { border-radius: var(--radius); padding: 18px; margin-bottom: 10px; }
+  .qc.ok { border-color: var(--green-border); background: var(--green-bg); }
+  .qc.bad { border-color: var(--red-border); background: var(--red-bg); }
+  .qn { font-family: var(--mono); font-size: .7rem; font-weight: 700; color: rgba(255,255,255,.35); margin-bottom: 6px; }
+  .qt { font-weight: 800; font-size: .95rem; margin-bottom: 14px; line-height: 1.5; }
+  .opts { display: flex; flex-direction: column; gap: 6px; }
+  .op {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 14px; border-radius: var(--radius-sm);
+    border: 1.5px solid rgba(255,255,255,.1);
+    background: rgba(255,255,255,.03);
+    cursor: pointer; transition: all .15s; user-select: none; font-size: .88rem;
+  }
+  .op:hover:not(.lk) { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.18); }
+  .op.lk { cursor: default; }
+  .op input { margin-top: 4px; accent-color: var(--accent); pointer-events: none; }
+  .op.gc { border-color: var(--green-border); background: var(--green-bg); font-weight: 700; }
+  .op.gw { border-color: var(--red-border); background: var(--red-bg); text-decoration: line-through; opacity: .75; }
+  .fb { margin-top: 10px; padding: 10px 14px; border-radius: 12px; font-size: .84rem; font-weight: 700; display: none; }
+  .fb.fok { display: block; background: var(--green-bg); border: 1px solid var(--green-border); color: #d1fae5; }
+  .fb.fno { display: block; background: var(--red-bg); border: 1px solid var(--red-border); color: #fecaca; }
+
+  @media (max-width: 640px) {
+    .quiz-bar { top: 50px; }
+    .qt { font-size: .9rem; }
+    .op { padding: 9px 12px; font-size: .84rem; }
+  }
+</style>
+</head>
+<body>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="data/quiz-pp-data.js"></script>
+<script>Auth.requireAuth(); buildNav("quiz-pp");</script>
+
+<!-- Quiz progress bar -->
+<div class="quiz-bar">
+  <div class="quiz-bar-inner">
+    <div class="gap-row">
+      <button class="btn accent" onclick="random30()">🎲 Losuj 30</button>
+      <button class="btn" onclick="showAll()">📚 Wszystkie</button>
+      <button class="btn" id="filterBtn" onclick="tf()">Tylko błędne</button>
+      <button class="btn danger" onclick="ra()">Reset</button>
+    </div>
+    <div class="prog-area">
+      <div class="prog-bar"><div class="prog-fill" id="pf"></div></div>
+      <div class="score-text" id="sl"></div>
+    </div>
+    <span class="mode-tag" id="modeTag">210 pytań</span>
+  </div>
+</div>
+
+<!-- Category pills -->
+<div class="page" style="padding-bottom:20px">
+  <div class="pill-scroll">
+    <div class="pills" id="catPills"></div>
+  </div>
+</div>
+
+<!-- Questions container -->
+<div class="page" id="ct" style="padding-top:0"></div>
+
+<div class="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+
+<script>
+var Q = QUIZ_PP;
+var allIdx=Q.map(function(_,i){return i}),activeIdx=allIdx.slice(),mode="all",st=new Array(Q.length).fill(-1),fw=false,sections=[];
+
+function secName(i){for(var k=i;k>=0;k--)if(Q[k].s)return Q[k].s;return"Inne"}
+function buildSec(){
+  var sorted=activeIdx.slice().sort(function(a,b){return a-b}),map=new Map(),order=[];
+  for(var t=0;t<sorted.length;t++){var qi=sorted[t],nm=secName(qi);if(!map.has(nm)){map.set(nm,{nm:nm,idx:[],ok:0,ans:0,anc:null});order.push(nm)}map.get(nm).idx.push(qi)}
+  sections=order.map(function(nm,si){var s=map.get(nm);s.anc="s"+si;s.ok=0;s.ans=0;for(var x=0;x<s.idx.length;x++){var qi=s.idx[x];if(st[qi]!==-1){s.ans++;if(st[qi]===Q[qi].c)s.ok++}}return s})
+}
+function render(){
+  buildSec();var L="abcd",h="";
+  for(var si=0;si<sections.length;si++){var sec=sections[si];
+    h+='<div class="sec-head glass" id="'+sec.anc+'"><span>'+sec.nm+' <span style="opacity:.4;font-weight:500">('+sec.idx.length+')</span></span><span class="sec-score" id="ss'+si+'"></span></div>';
+    for(var t=0;t<sec.idx.length;t++){var i=sec.idx[t],q=Q[i];
+      h+='<div class="qc glass" id="q'+i+'"><div class="qn">'+q.n+' / 210</div><div class="qt">'+q.q+'</div><div class="opts">';
+      for(var j=0;j<q.o.length;j++)h+='<label class="op" id="o'+i+'_'+j+'" onclick="pk('+i+','+j+')"><input type="radio" name="r'+i+'" value="'+j+'"><span>'+L[j]+') '+q.o[j]+'</span></label>';
+      h+='</div><div class="fb" id="f'+i+'"></div></div>'}}
+  document.getElementById("ct").innerHTML=h;
+  document.getElementById("catPills").innerHTML=sections.map(function(s,i){var sc=s.ans>0?s.ok+"/"+s.ans:"\u2014";return '<button class="pill" onclick="document.getElementById(\''+s.anc+"').scrollIntoView({behavior:'smooth'})\">"+s.nm+'<span class="pill-meta" id="cp'+i+'">('+sc+")</span></button>"}).join("");
+  for(var k=0;k<activeIdx.length;k++){var i=activeIdx[k];if(st[i]!==-1)applyUI(i,st[i])}
+  us();if(fw)tf(true)
+}
+function applyUI(i,ch){
+  var q=Q[i],ok=ch===q.c,card=document.getElementById("q"+i);if(!card)return;
+  var fb=document.getElementById("f"+i),ops=card.querySelectorAll(".op");
+  for(var k=0;k<ops.length;k++){ops[k].classList.add("lk");if(k===q.c)ops[k].classList.add("gc");if(k===ch&&!ok)ops[k].classList.add("gw")}
+  if(ok){card.classList.add("ok");fb.className="fb fok";fb.textContent="\u2713 Poprawna odpowied\u017a!"}
+  else{card.classList.add("bad");fb.className="fb fno";fb.textContent="\u2717 B\u0142\u0119dna. Poprawna: "+"abcd"[q.c]+") "+q.o[q.c]}
+}
+function pk(i,j){if(st[i]!==-1)return;st[i]=j;applyUI(i,j);us()}
+function us(){
+  var a=0,c=0;for(var k=0;k<activeIdx.length;k++){var i=activeIdx[k];if(st[i]!==-1){a++;if(st[i]===Q[i].c)c++}}
+  var d=activeIdx.length||1,p=Math.round(a/d*100);
+  document.getElementById("pf").style.width=p+"%";
+  document.getElementById("modeTag").textContent=mode==="rnd30"?"Losowe 30":d+" pyta\u0144";
+  if(a>0){var sp=Math.round(c/a*100);document.getElementById("sl").innerHTML="\u2713 "+c+" \u00b7 \u2717 "+(a-c)+" \u00b7 "+sp+"%  ("+a+"/"+d+")"}
+  else document.getElementById("sl").innerHTML=a+"/"+d;
+  buildSec();
+  for(var i=0;i<sections.length;i++){var t=sections[i].ans>0?sections[i].ok+"/"+sections[i].ans:"\u2014";
+    var e1=document.getElementById("ss"+i),e2=document.getElementById("cp"+i);
+    if(e1)e1.textContent=t;if(e2)e2.textContent="("+t+")"}
+}
+function tf(skip){
+  if(!skip)fw=!fw;
+  document.getElementById("filterBtn").textContent=fw?"Poka\u017c wszystkie":"Tylko b\u0142\u0119dne";
+  for(var k=0;k<activeIdx.length;k++){var i=activeIdx[k],c=document.getElementById("q"+i);if(!c)continue;
+    if(fw&&st[i]!==-1&&st[i]===Q[i].c)c.classList.add("hd");else c.classList.remove("hd")}
+  for(var si=0;si<sections.length;si++){var sec=sections[si],el=document.getElementById(sec.anc);if(!el)continue;
+    if(!fw){el.classList.remove("hd");continue}
+    var vis=false;for(var t=0;t<sec.idx.length;t++){var qi=sec.idx[t];if(st[qi]===-1||st[qi]!==Q[qi].c){vis=true;break}}
+    el.classList.toggle("hd",!vis)}
+}
+function ra(){
+  for(var k=0;k<activeIdx.length;k++)st[activeIdx[k]]=-1;
+  fw=false;document.getElementById("filterBtn").textContent="Tylko b\u0142\u0119dne";
+  render();window.scrollTo({top:0,behavior:"smooth"})
+}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function random30(){mode="rnd30";activeIdx=shuffle(allIdx.slice()).slice(0,30).sort(function(a,b){return a-b});ra()}
+function showAll(){mode="all";activeIdx=allIdx.slice();ra()}
+
+render();
+</script>
+</body>
+</html>
