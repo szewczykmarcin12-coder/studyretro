@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyApp</title>
+<link rel="stylesheet" href="css/theme.css">
+<style>
+  .subj-hero{text-align:center;padding:36px 0 10px}
+  .subj-icon{width:64px;height:64px;border-radius:20px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:1.8rem}
+  .subj-icon.purple{background:rgba(167,139,250,.15)}.subj-icon.teal{background:rgba(52,211,153,.15)}.subj-icon.pink{background:rgba(244,114,182,.15)}.subj-icon.orange{background:rgba(251,146,60,.15)}.subj-icon.blue{background:rgba(96,165,250,.15)}.subj-icon.yellow{background:rgba(250,204,21,.15)}.subj-icon.red{background:rgba(248,113,113,.15)}.subj-icon.cyan{background:rgba(34,211,238,.15)}
+  .subj-hero h1{font-size:1.4rem;font-weight:800;letter-spacing:-.02em}
+  .subj-hero p{opacity:.45;margin-top:6px;font-size:.88rem}
+  .actions{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:28px;max-width:600px;margin-left:auto;margin-right:auto}
+  .action{border-radius:var(--radius);padding:28px 24px;text-decoration:none;color:inherit;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+  .action:hover{background:var(--glass-hover);border-color:rgba(255,255,255,.2);transform:translateY(-2px)}
+  .action .a-icon{font-size:2rem;margin-bottom:4px}
+  .action h3{font-size:1rem;font-weight:800}
+  .action p{font-size:.82rem;opacity:.5}
+  .empty-state{text-align:center;padding:60px 20px}
+  .empty-icon{width:72px;height:72px;border-radius:22px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:2rem;background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.15)}
+  .empty-state h2{font-size:1.2rem;font-weight:800;background:linear-gradient(135deg,#fed7aa,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+  .empty-state p{opacity:.4;max-width:380px;margin:0 auto;font-size:.9rem}
+  .back-link{display:inline-flex;align-items:center;gap:6px;color:var(--accent-bright);text-decoration:none;font-size:.85rem;font-weight:700;opacity:.7;transition:opacity .15s;margin-top:24px}
+  .back-link:hover{opacity:1}
+</style>
+</head>
+<body>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="data/subjects.js"></script>
+<script>Auth.requireAuth();buildNav("subject");</script>
+
+<div class="page" id="root"></div>
+
+<script>
+var sid = getSubjectId();
+var subj = getSubject();
+document.title = "StudyApp – " + subj.name;
+
+var root = document.getElementById("root");
+
+if (subj.hasQuiz || subj.hasFlash) {
+  // Active subject - show actions
+  root.innerHTML =
+    '<div class="subj-hero fade-in">'
+    + '<div class="subj-icon ' + subj.color + '">' + subj.icon + '</div>'
+    + '<h1>' + subj.name + '</h1>'
+    + '<p>Wybierz tryb nauki</p>'
+    + '</div>'
+    + '<div class="actions">'
+    + (subj.hasQuiz ? '<a href="quiz-pp.html" class="action glass fade-in-d1"><div class="a-icon">📝</div><h3>Quiz</h3><p>Test z pytaniami egzaminacyjnymi z natychmiastowym feedbackiem</p></a>' : '')
+    + (subj.hasFlash ? '<a href="flashcards.html?id=' + sid + '" class="action glass fade-in-d2"><div class="a-icon">🃏</div><h3>Fiszki</h3><p>Powtarzaj kluczowe pojęcia i definicje</p></a>' : '')
+    + '</div>'
+    + '<div style="text-align:center"><a href="dashboard.html" class="back-link fade-in-d3">← Wróć do panelu</a></div>';
+} else {
+  // Coming soon
+  root.innerHTML =
+    '<div class="subj-hero fade-in">'
+    + '<div class="subj-icon ' + subj.color + '">' + subj.icon + '</div>'
+    + '<h1>' + subj.name + '</h1>'
+    + '</div>'
+    + '<div class="empty-state fade-in-d1">'
+    + '<div class="empty-icon">🚧</div>'
+    + '<h2>Quiz pojawi się wkrótce</h2>'
+    + '<p>Materiały do tego przedmiotu są w przygotowaniu. Wróć tu za jakiś czas!</p>'
+    + '</div>'
+    + '<div style="text-align:center"><a href="dashboard.html" class="back-link fade-in-d2">← Wróć do panelu</a></div>';
+}
+</script>
+</body>
+</html>

@@ -6,87 +6,53 @@
 <title>StudyApp – Panel</title>
 <link rel="stylesheet" href="css/theme.css">
 <style>
-  .hero { text-align: center; padding: 40px 0 20px; }
-  .hero h1 {
-    font-size: 1.8rem; font-weight: 800; letter-spacing: -.03em;
-    background: linear-gradient(135deg, #e0e7ff 30%, var(--accent));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
-  .hero p { opacity: .5; margin-top: 6px; font-size: .92rem; }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 14px; margin-top: 28px;
-  }
-  .tile {
-    border-radius: var(--radius); padding: 28px 24px;
-    text-decoration: none; color: inherit;
-    transition: all .2s; cursor: pointer;
-    display: flex; flex-direction: column; gap: 10px;
-  }
-  .tile:hover { background: var(--glass-hover); border-color: rgba(255,255,255,.2); transform: translateY(-2px); }
-  .tile-icon {
-    width: 48px; height: 48px; border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.4rem;
-  }
-  .tile-icon.purple { background: rgba(167,139,250,.15); }
-  .tile-icon.teal { background: rgba(52,211,153,.15); }
-  .tile-icon.orange { background: rgba(251,146,60,.15); }
-  .tile-icon.pink { background: rgba(244,114,182,.15); }
-  .tile h3 { font-size: 1.05rem; font-weight: 800; }
-  .tile p { font-size: .84rem; opacity: .55; line-height: 1.5; }
-  .tile .tag {
-    display: inline-block; padding: 3px 10px; border-radius: 8px;
-    font-size: .72rem; font-weight: 700; font-family: var(--mono);
-    background: var(--accent-bg); color: var(--accent-bright);
-    align-self: flex-start;
-  }
-  .tile .tag.soon {
-    background: rgba(251,146,60,.12); color: #fb923c;
-  }
+  .hero{text-align:center;padding:40px 0 20px}
+  .hero h1{font-size:1.8rem;font-weight:800;letter-spacing:-.03em;background:linear-gradient(135deg,#e0e7ff 30%,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p{opacity:.5;margin-top:6px;font-size:.92rem}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:28px}
+  .tile{border-radius:var(--radius);padding:24px 22px;text-decoration:none;color:inherit;transition:all .2s;cursor:pointer;display:flex;flex-direction:column;gap:10px}
+  .tile:hover{background:var(--glass-hover);border-color:rgba(255,255,255,.2);transform:translateY(-2px)}
+  .tile-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+  .tile-icon.purple{background:rgba(167,139,250,.15)}.tile-icon.teal{background:rgba(52,211,153,.15)}.tile-icon.pink{background:rgba(244,114,182,.15)}.tile-icon.orange{background:rgba(251,146,60,.15)}.tile-icon.blue{background:rgba(96,165,250,.15)}.tile-icon.yellow{background:rgba(250,204,21,.15)}.tile-icon.red{background:rgba(248,113,113,.15)}.tile-icon.cyan{background:rgba(34,211,238,.15)}
+  .tile h3{font-size:1rem;font-weight:800;line-height:1.3}
+  .tile p{font-size:.82rem;opacity:.5;line-height:1.5}
+  .tag{display:inline-block;padding:3px 10px;border-radius:8px;font-size:.7rem;font-weight:700;font-family:var(--mono);align-self:flex-start}
+  .tag.ok{background:var(--accent-bg);color:var(--accent-bright)}.tag.soon{background:rgba(251,146,60,.12);color:#fb923c}
+  .slabel{font-size:.72rem;font-weight:700;font-family:var(--mono);text-transform:uppercase;letter-spacing:1.5px;opacity:.35;margin-top:32px;margin-bottom:-8px;padding-left:4px}
 </style>
 </head>
 <body>
 <script src="js/auth.js"></script>
 <script src="js/nav.js"></script>
-<script>Auth.requireAuth(); buildNav("dashboard");</script>
-
+<script>Auth.requireAuth();buildNav("dashboard");</script>
 <div class="page">
-  <div class="hero fade-in">
-    <h1>Witaj w StudyApp</h1>
-    <p>Wybierz materiał, którego chcesz się uczyć</p>
-  </div>
-
+  <div class="hero fade-in"><h1>Witaj w StudyApp</h1><p>Wybierz przedmiot, którego chcesz się uczyć</p></div>
+  <div class="slabel fade-in-d1">Przedmioty</div>
   <div class="grid">
-    <a href="quiz-pp.html" class="tile glass fade-in-d1">
-      <div class="tile-icon purple">🧠</div>
-      <h3>Procesy Poznawcze</h3>
-      <p>Test z 210 pytań egzaminacyjnych. Natychmiastowy feedback, kategorie, tryb losowy.</p>
-      <span class="tag">210 pytań</span>
-    </a>
-
-    <a href="flashcards.html" class="tile glass fade-in-d2">
-      <div class="tile-icon teal">🃏</div>
-      <h3>Fiszki</h3>
-      <p>Powtarzaj kluczowe pojęcia z procesów poznawczych. Odwracaj karty i ucz się efektywnie.</p>
-      <span class="tag">Fiszki</span>
-    </a>
-
-    <a href="other.html" class="tile glass fade-in-d2">
-      <div class="tile-icon orange">📝</div>
-      <h3>Psychologia Społeczna</h3>
-      <p>Quiz z psychologii społecznej pojawi się wkrótce.</p>
-      <span class="tag soon">Wkrótce</span>
-    </a>
-
-    <a href="other.html" class="tile glass fade-in-d3">
-      <div class="tile-icon pink">📊</div>
-      <h3>Metodologia Badań</h3>
-      <p>Quiz z metodologii badań psychologicznych pojawi się wkrótce.</p>
-      <span class="tag soon">Wkrótce</span>
-    </a>
+    <a href="subject.html?id=pp" class="tile glass fade-in-d1">
+      <div class="tile-icon purple">🧠</div><h3>Procesy Poznawcze</h3>
+      <p>210 pytań egzaminacyjnych + fiszki z kluczowymi pojęciami</p><span class="tag ok">Quiz + Fiszki</span></a>
+    <a href="subject.html?id=bio" class="tile glass fade-in-d1">
+      <div class="tile-icon teal">🧬</div><h3>Biofizjologiczne podstawy zachowania</h3>
+      <p>Quiz i fiszki pojawią się wkrótce</p><span class="tag soon">Wkrótce</span></a>
+    <a href="subject.html?id=emo" class="tile glass fade-in-d2">
+      <div class="tile-icon pink">❤️‍🔥</div><h3>Emocje, motywacja i mechanizmy kontroli</h3>
+      <p>Quiz i fiszki pojawią się wkrótce</p><span class="tag soon">Wkrótce</span></a>
+    <a href="subject.html?id=zloz" class="tile glass fade-in-d2">
+      <div class="tile-icon orange">🔮</div><h3>Złożone procesy poznawcze</h3>
+      <p>Quiz i fiszki pojawią się wkrótce</p><span class="tag soon">Wkrótce</span></a>
+    <a href="subject.html?id=rozwoj" class="tile glass fade-in-d2">
+      <div class="tile-icon blue">👶</div><h3>Psychologia rozwoju człowieka w biegu życia II</h3>
+      <p>Quiz i fiszki pojawią się wkrótce</p><span class="tag soon">Wkrótce</span></a>
+    <a href="subject.html?id=stosow" class="tile glass fade-in-d3">
+      <div class="tile-icon yellow">⚙️</div><h3>Wybrane problemy psychologii stosowanej</h3>
+      <p>Quiz i fiszki pojawią się wkrótce</p><span class="tag soon">Wkrótce</span></a>
+    <a href="subject.html?id=trening" class="tile glass fade-in-d3">
+      <div class="tile-icon red">🎯</div><h3>Trening psychologiczny I</h3>
+      <p>Quiz i fiszki pojawią się wkrótce</p><span class="tag soon">Wkrótce</span></a>
+    <a href="subject.html?id=tech" class="tile glass fade-in-d3">
+      <div class="tile-icon cyan">💻</div><h3>Technologia informacyjna dla psychologów</h3>
+      <p>Quiz i fiszki pojawią się wkrótce</p><span class="tag soon">Wkrótce</span></a>
   </div>
 </div>
 </body>

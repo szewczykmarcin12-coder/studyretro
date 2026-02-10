@@ -1,57 +1,57 @@
-# StudyApp – Procesy Poznawcze
+# StudyApp
 
-Aplikacja do nauki z quizami i fiszkami. Glassmorphism UI.
+Aplikacja do nauki z quizami i fiszkami tematycznymi. Glassmorphism UI.
 
 ## Struktura projektu
 
 ```
 studyapp/
-├── index.html          # Strona logowania
-├── dashboard.html      # Panel główny
-├── quiz-pp.html        # Quiz: Procesy Poznawcze (210 pytań)
-├── flashcards.html     # Fiszki
-├── other.html          # Placeholder na przyszłe quizy
-├── vercel.json         # Konfiguracja Vercel
-├── css/
-│   └── theme.css       # Wspólny motyw (liquid glass)
-├── js/
-│   ├── auth.js         # Moduł autoryzacji
-│   └── nav.js          # Nawigacja
-└── data/
-    ├── quiz-pp-data.js     # 210 pytań z Procesów Poznawczych
-    └── flashcards-data.js  # Dane fiszek
+├── index.html           # Logowanie
+├── dashboard.html       # Panel z przedmiotami
+├── subject.html         # Strona przedmiotu (quiz/fiszki/wkrótce)
+├── quiz-pp.html         # Quiz: Procesy Poznawcze (210 pytań)
+├── flashcards.html      # Fiszki (tematyczne wg przedmiotu)
+├── vercel.json          # Konfiguracja Vercel
+├── css/theme.css        # Motyw liquid glass
+├── js/auth.js           # Autoryzacja (sessionStorage)
+├── js/nav.js            # Nawigacja
+├── data/subjects.js     # Rejestr przedmiotów
+├── data/quiz-pp-data.js # 210 pytań
+└── data/flashcards-data.js  # Fiszki per przedmiot
 ```
+
+## Przedmioty
+
+| Przedmiot | Quiz | Fiszki |
+|-----------|------|--------|
+| Procesy Poznawcze | ✅ 210 pytań | ✅ 55 fiszek |
+| Biofizjologiczne podstawy zachowania | 🔜 | 🔜 |
+| Emocje, motywacja i mechanizmy kontroli | 🔜 | 🔜 |
+| Złożone procesy poznawcze | 🔜 | 🔜 |
+| Psychologia rozwoju człowieka w biegu życia II | 🔜 | 🔜 |
+| Wybrane problemy psychologii stosowanej | 🔜 | 🔜 |
+| Trening psychologiczny I | 🔜 | 🔜 |
+| Technologia informacyjna dla psychologów | 🔜 | 🔜 |
 
 ## Logowanie
 
 - **Login:** `Zimbardo`
 - **Hasło:** `Maruszewski`
 
-## Deploy na Vercel przez GitHub
+## Deploy na Vercel
 
-1. Stwórz nowe repozytorium na GitHub
-2. Wrzuć pliki do repo:
+1. Stwórz repo na GitHub i wrzuć pliki:
    ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
+   git init && git add . && git commit -m "init"
    git branch -M main
-   git remote add origin https://github.com/TWOJ-USER/studyapp.git
+   git remote add origin https://github.com/USER/studyapp.git
    git push -u origin main
    ```
-3. Wejdź na [vercel.com](https://vercel.com) i zaloguj się kontem GitHub
-4. Kliknij **"Add New Project"**
-5. Zaimportuj swoje repozytorium
-6. Vercel automatycznie wykryje statyczną stronę – kliknij **Deploy**
-7. Gotowe! Strona dostępna pod adresem `twoj-projekt.vercel.app`
+2. Na [vercel.com](https://vercel.com) → **Add New Project** → zaimportuj repo → **Deploy**
 
-## Funkcje
+## Dodawanie nowego przedmiotu
 
-- Logowanie z zabezpieczeniem sesji (sessionStorage)
-- Quiz z 210 pytań z natychmiastowym feedbackiem
-- Tryb losowy (30 pytań)
-- Filtrowanie błędnych odpowiedzi
-- Fiszki z odwracaniem kart i śledzeniem postępu
-- Kategorie tematyczne
-- Responsywny design (mobile-first)
-- Motyw liquid glass
+1. Dodaj pytania do `data/quiz-NOWY-data.js`
+2. Dodaj fiszki do `data/flashcards-data.js` (klucz w obiekcie `FLASHCARDS_BY_SUBJECT`)
+3. Ustaw `hasQuiz: true` / `hasFlash: true` w `data/subjects.js`
+4. Stwórz stronę quizu analogicznie do `quiz-pp.html`
